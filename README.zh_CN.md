@@ -1,3 +1,5 @@
+[English](README.md) | 中文
+
 # OmniHand Pro 2025 SDK
 
 ## 概述
