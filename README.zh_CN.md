@@ -2,7 +2,7 @@
 
 ## 概述
 
-OmniHand Pro 2025 是一款专业级灵巧手，具备精准操作、灵活控制的性能特点，配备 0.1N 级触觉闭环系统和多模态感知能力（位置、力感知、接近觉等），采用轻量化的仿人设计，可广泛应用于科研教育、文娱商演、展厅导览和工业场景等领域。为方便用户快速开发和应用，我们提供配套的 OmniHand Pro 2025 SDK 开发包，支持 Python 和 C++双语言 API 接口，实现灵巧手的控制和数据采集等功能。
+OmniHand Pro 2025 是一款 12 自由度的专业级灵巧手，具备精准操作、灵活控制的性能特点，配备触觉传感器和多种控制模式（位控、力控、混合控制），可广泛应用于科研教育、文娱商演、展厅导览和工业场景等领域。为方便用户快速开发和应用，我们提供配套的 OmniHand Pro 2025 SDK 开发包，支持 Python 和 C++双语言 API 接口，实现灵巧手的控制和数据采集等功能。
 
 ![](document/pic/hand.jpg)
 
@@ -44,12 +44,6 @@ OmniHand Pro 2025 是一款专业级灵巧手，具备精准操作、灵活控�
 # 从GitHub下载对应版本的python whl包
 # 例如：agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
 pip install agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
-```
-
-##### C++ 库安装
-
-```bash
-
 ```
 
 ## 灵巧手电机索引
@@ -99,9 +93,7 @@ python3 ./demo_gestures_ok.py
 
 ### Q1: 启动程序发现无法和手进行通信？
 
-**A:** 首先需要确保正确安装驱动，详情参见[ZLG驱动安装说明](https://manual.zlg.cn/web/#/42/1710:~:text=%23sudo%20chmod%20666%20/dev/bus/usb/xxx/yyy)，确保手电源已连接，且 USB 端接入电脑后，执行以下指令：
-
-
+**A:** 首先需要确保正确安装驱动，详情参见[ZLG 驱动安装说明](https://manual.zlg.cn/web/#/42/1710:~:text=%23sudo%20chmod%20666%20/dev/bus/usb/xxx/yyy)，确保手电源已连接，且 USB 端接入电脑后，执行以下指令：
 
 ```shell
 lsusb

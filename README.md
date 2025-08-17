@@ -2,7 +2,7 @@
 
 ## Overview
 
-OmniHand Pro 2025 is a professional dexterous hand featuring precise operation, flexible control, 0.1N-level tactile closed-loop system, and multi-modal sensing capabilities (position, force sensing, proximity detection, etc.). With its lightweight anthropomorphic design, it can be widely applied in scientific research, entertainment performances, exhibition guidance, and industrial scenarios. To facilitate rapid development and application, we provide the OmniHand Pro 2025 SDK development kit with both Python and C++ API interfaces for hand control and data acquisition.
+OmniHand Pro 2025 is a 12-degree-of-freedom professional dexterous hand featuring precise operation and flexible control capabilities. It is equipped with tactile sensors and multiple control modes (position control, force control, hybrid control), making it suitable for a wide range of applications including research and education, entertainment and commercial performances, exhibition guidance, and industrial scenarios. To facilitate rapid development and application by users, we provide the accompanying OmniHand Pro 2025 SDK development package, which supports both Python and C++ API interfaces for implementing dexterous hand control and data acquisition functions.
 
 ![](document/pic/hand.jpg)
 
@@ -46,12 +46,6 @@ Execute the following commands in the project root directory:
 pip install agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
 ```
 
-##### C++ Library Installation
-
-```bash
-
-```
-
 ## Dexterous Hand Motor Index
 
 OmniHand Pro 2025 has 12 degrees of freedom, with indices ranging from 1 to 12. The control motors corresponding to each index are shown in the following figure:
@@ -90,12 +84,16 @@ For detailed API usage, please refer to:
 
 ## FAQ
 
-### Q1: xxxxxxxxxxxxxxx?
+### Q1: Unable to communicate with the hand when starting the program?
 
-**A:** xxxxxxxxxxxxxx:
+**A:** First, ensure that the driver is properly installed. For details, refer to the [ZLG Driver Installation Guide](https://manual.zlg.cn/web/#/42/1710:~:text=%23sudo%20chmod%20666%20/dev/bus/usb/xxx/yyy). Make sure the hand power is connected and the USB end is plugged into the computer, then execute the following commands:
 
 ```shell
+lsusb
 
+sudo chmod 666 /dev/bus/usb/xxx/yyy
+
+# Replace `xxx/yyy` with the actual USB device path shown by the `lsusb` command.
 ```
 
 ## License
