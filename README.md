@@ -105,7 +105,7 @@ sudo chmod 666 /dev/bus/usb/xxx/yyy
 
 ## Copyright
 
-Copyright (c) 2025 Agibot. OmniHand Pro 2025 SDK is licensed under Mulan PSL v2.
+Copyright (c) 2025 Agibot Co., Ltd. OmniHand Pro 2025 SDK is licensed under Mulan PSL v2.
 
 ---
 
