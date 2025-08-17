@@ -39,7 +39,6 @@ endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-include(GetPybind11)
 
 # find python dependencies
 if(BUILD_PYTHON_BINDING)

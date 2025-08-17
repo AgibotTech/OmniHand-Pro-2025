@@ -12,22 +12,22 @@ OmniHand Pro 2025 is a 12-degree-of-freedom professional dexterous hand featurin
 
 #### Hardware Requirements
 
-- ZLG USBCANFD Series
+- ZLG USBCANFD series (USBCANFD-100U-mini recommended)
 
 #### Software Requirements
 
 - Operating System: Ubuntu 22.04 (x86_64)
 - Compiler: GCC 11.4 or higher
-- Build Tool: CMake 3.22 or higher
+- Build Tools: CMake 3.16 or higher
 - Python: 3.10 or higher
 
 ### Installation
 
-You can choose between building from source or using pre-built packages.
+You can choose between source code compilation installation or pre-compiled package installation.
 
-#### Building from Source
+#### Source Code Compilation Installation
 
-Execute the following commands in the project root directory:
+Execute the following command in the project root directory:
 
 ```bash
 ./build.sh -DCMAKE_BUILD_TYPE=Release \
@@ -36,28 +36,34 @@ Execute the following commands in the project root directory:
            -DBUILD_CPP_EXAMPLES=OFF \
 ```
 
-#### Pre-built Packages
+#### Pre-compiled Package Installation
 
-##### Python Package Installation
+##### Python whl Package Installation
 
 ```bash
-# Download the corresponding Python wheel package from GitHub
+# Download the corresponding version of python whl package from GitHub
 # Example: agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
 pip install agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
 ```
 
 ## Dexterous Hand Motor Index
 
-OmniHand Pro 2025 has 12 degrees of freedom, with indices ranging from 1 to 12. The control motors corresponding to each index are shown in the following figure:
+OmniHand Pro 2025 has 12 degrees of freedom, indexed from 1 to 12. The control motors corresponding to each index are shown in the figure below:
 
 ![](document/pic/hand_joints.jpg)
 
 ## Running Examples
 
+```bash
+cd python/example
+
+python3 ./demo_gestures_ok.py
+```
+
 ## Directory Structure
 
 ```bash
-├── thirdParty              # Third-party dependencies
+├── thirdParty              # Third-party dependency libraries
 ├── src                     # C++ core source code
 │   ├── proto.h
 │   ├── export_symbols.h
@@ -65,19 +71,19 @@ OmniHand Pro 2025 has 12 degrees of freedom, with indices ranging from 1 to 12. 
 │   ├── can_bus_device
 │   ├── c_agibot_hand.h
 │   └── c_agibot_hand.cc
-├── scripts                 # Utility scripts
+├── scripts                 # Script tools directory
 │   └── setup.sh
-├── python                  # Python bindings (Python interface generated from C++ source)
+├── python                  # Python binding module (Python interface generated from C++ source code)
 ├── examples                # C++ example code
-├── document                # Documentation
-├── CMakeLists.txt         # Main CMake configuration
-├── cmake                   # CMake modules
-└── build.sh               # Build script
+├── document                # Documentation directory
+├── CMakeLists.txt          # Main CMake configuration file
+├── cmake                   # CMake modules directory
+└── build.sh                # Build script
 ```
 
-## API Documentation
+## API Introduction
 
-For detailed API usage, please refer to:
+For detailed API usage instructions, please refer to the following links:
 
 - [OmniHand Pro 2025 SDK C++ API Documentation](document/API_CPP.md)
 - [OmniHand Pro 2025 SDK Python API Documentation](document/API_PYTHON.md)
@@ -92,15 +98,14 @@ For detailed API usage, please refer to:
 lsusb
 
 sudo chmod 666 /dev/bus/usb/xxx/yyy
-
 # Replace `xxx/yyy` with the actual USB device path shown by the `lsusb` command.
 ```
 
-## License
+## Copyright
 
-Copyright (c) 2025 Agibot Co., Ltd. OmniHand Pro 2025 SDK is licensed under Mulan PSL v2.
+Copyright (c) 2025 Agibot. OmniHand Pro 2025 SDK is licensed under Mulan PSL v2.
 
 ---
 
 _Document Version: v1.0.0_  
-_Last Updated: 2025-08_
+_Last Updated: 2025-8_
