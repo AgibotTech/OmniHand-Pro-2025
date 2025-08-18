@@ -4,7 +4,7 @@ English | [中文](README.zh_CN.md)
 
 ## Overview
 
-OmniHand Pro 2025 is a 12-degree-of-freedom professional dexterous hand featuring precise operation and flexible control capabilities. It is equipped with tactile sensors and multiple control modes (position control, force control, hybrid control), making it suitable for a wide range of applications including research and education, entertainment and commercial performances, exhibition guidance, and industrial scenarios. To facilitate rapid development and application by users, we provide the accompanying OmniHand Pro 2025 SDK development package, which supports both Python and C++ API interfaces for implementing dexterous hand control and data acquisition functions.
+OmniHand Pro 2025 is a 12-degree-of-freedom professional dexterous hand featuring precise operation and flexible control capabilities. It is equipped with tactile sensors and multiple control modes (position control, torque control, hybrid control), making it suitable for a wide range of applications including research and education, entertainment and commercial performances, exhibition guidance, and industrial scenarios. To facilitate rapid development and application by users, we provide the accompanying OmniHand Pro 2025 SDK development package, which supports both Python and C++ API interfaces for implementing dexterous hand control and data acquisition functions.
 
 ![](document/pic/hand.jpg)
 
