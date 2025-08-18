@@ -103,11 +103,24 @@ sudo chmod 666 /dev/bus/usb/xxx/yyy
 # Replace `xxx/yyy` with the actual USB device path shown by the `lsusb` command.
 ```
 
+### Q2: Source code compilation fails during Python packaging step?
+
+**A:** Check if the following dependencies are installed:
+
+```shell
+sudo apt install python3.10-dev
+
+pip3 install build setuptools wheel
+```
+
+```
+
 ## Copyright
 
 Copyright (c) 2025 Agibot Co., Ltd. OmniHand Pro 2025 SDK is licensed under Mulan PSL v2.
 
 ---
 
-_Document Version: v1.0.0_  
+_Document Version: v1.0.0_
 _Last Updated: 2025-8_
+```

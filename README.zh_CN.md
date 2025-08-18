@@ -103,6 +103,16 @@ lsusb
 sudo chmod 666 /dev/bus/usb/xxx/yyy
 ```
 
+### Q2: 源码编译在 python 打包环节报错？
+
+**A:** 检查如下依赖是否安装：
+
+```shell
+sudo apt install python3.10-dev
+
+pip3 install build setuptools wheel
+```
+
 ## 版权声明
 
 Copyright (c) 2025 Agibot Co., Ltd. OmniHand Pro 2025 SDK is licensed under Mulan PSL v2.
