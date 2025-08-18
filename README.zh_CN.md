@@ -14,7 +14,7 @@ OmniHand Pro 2025 是一款 12 自由度的专业级灵巧手，具备精准操�
 
 #### 硬件要求
 
-- ZLG USBCANFD 系列 （推荐 USBCANFD-100U-mini）
+- ZLG USBCANFD 系列 （推荐 USBCANFD-100U-mini/USBCANFD-100U）
 
 #### 软件要求
 

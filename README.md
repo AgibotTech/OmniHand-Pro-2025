@@ -14,7 +14,7 @@ OmniHand Pro 2025 is a 12-degree-of-freedom professional dexterous hand featurin
 
 #### Hardware Requirements
 
-- ZLG USBCANFD series (USBCANFD-100U-mini recommended)
+- ZLG USBCANFD series (USBCANFD-100U-mini/USBCANFD-100U recommended)
 
 #### Software Requirements
 
