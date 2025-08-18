@@ -113,8 +113,6 @@ sudo apt install python3.10-dev
 pip3 install build setuptools wheel
 ```
 
-```
-
 ## Copyright
 
 Copyright (c) 2025 Agibot Co., Ltd. OmniHand Pro 2025 SDK is licensed under Mulan PSL v2.
@@ -123,4 +121,3 @@ Copyright (c) 2025 Agibot Co., Ltd. OmniHand Pro 2025 SDK is licensed under Mula
 
 _Document Version: v1.0.0_
 _Last Updated: 2025-8_
-```
