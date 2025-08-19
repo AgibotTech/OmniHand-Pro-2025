@@ -38,6 +38,8 @@ Execute the following command in the project root directory:
            -DBUILD_CPP_EXAMPLES=OFF \
 ```
 
+DBUILD_PYTHON_BINDING is used to enable Python binding module compilation, and BUILD_CPP_EXAMPLES is used to disable C++ example code compilation.
+
 #### Pre-compiled Package Installation
 
 ##### Python whl Package Installation

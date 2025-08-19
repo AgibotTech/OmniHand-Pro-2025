@@ -38,6 +38,8 @@ OmniHand Pro 2025 是一款 12 自由度的专业级灵巧手，具备精准操�
              -DBUILD_CPP_EXAMPLES=OFF \
 ```
 
+DBUILD_PYTHON_BINDING 选项用于构建 Python 绑定模块，DBUILD_CPP_EXAMPLES 选项用于构建 C++ 示例代码。
+
 #### 预编译包安装
 
 ##### Python whl 包安装
