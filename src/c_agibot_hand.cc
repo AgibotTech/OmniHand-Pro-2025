@@ -46,46 +46,56 @@ AgibotHandO12::~AgibotHandO12() {
 }
 
 void AgibotHandO12::SetJointMotorPosi(unsigned char joint_motor_index, short posi) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::ePosiCtrl);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::ePosiCtrl);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  CanfdFrame posiReqFrame{};
-  posiReqFrame.can_id_ = unCanId.ui_can_id_;
-  posiReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
-  memcpy(posiReqFrame.data_, &posi, sizeof(posi));
-  try {
-    CanfdFrame posiRepFrame = canfd_device_->SendRequestSynch(posiReqFrame);
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame posiReqFrame{};
+    posiReqFrame.can_id_ = unCanId.ui_can_id_;
+    posiReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
+    memcpy(posiReqFrame.data_, &posi, sizeof(posi));
+    try {
+      CanfdFrame posiRepFrame = canfd_device_->SendRequestSynch(posiReqFrame);
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return;
   }
 }
 
 short AgibotHandO12::GetJointMotorPosi(unsigned char joint_motor_index) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::ePosiCtrl);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::ePosiCtrl);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  short posi{};
+    short posi{};
 
-  CanfdFrame posiReqFrame{};
-  posiReqFrame.can_id_ = unCanId.ui_can_id_;
-  posiReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
+    CanfdFrame posiReqFrame{};
+    posiReqFrame.can_id_ = unCanId.ui_can_id_;
+    posiReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
 
-  try {
-    CanfdFrame posiRepFrame = canfd_device_->SendRequestSynch(posiReqFrame);
-    memcpy(&posi, posiRepFrame.data_, sizeof(posi));
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    try {
+      CanfdFrame posiRepFrame = canfd_device_->SendRequestSynch(posiReqFrame);
+      memcpy(&posi, posiRepFrame.data_, sizeof(posi));
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+
+    return posi;
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return 0;
   }
-
-  return posi;
 }
 
 void AgibotHandO12::SetAllJointMotorPosi(std::vector<short> vec_posi) {
@@ -134,46 +144,56 @@ std::vector<short> AgibotHandO12::GetAllJointMotorPosi() {
 }
 
 void AgibotHandO12::SetJointMotorTorque(unsigned char joint_motor_index, short torque) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eTorqueCtrl);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eTorqueCtrl);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  CanfdFrame torqueReqFrame{};
-  torqueReqFrame.can_id_ = unCanId.ui_can_id_;
-  torqueReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
-  memcpy(torqueReqFrame.data_, &torque, sizeof(torque));
-  try {
-    CanfdFrame torqueRepFrame = canfd_device_->SendRequestSynch(torqueReqFrame);
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame torqueReqFrame{};
+    torqueReqFrame.can_id_ = unCanId.ui_can_id_;
+    torqueReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
+    memcpy(torqueReqFrame.data_, &torque, sizeof(torque));
+    try {
+      CanfdFrame torqueRepFrame = canfd_device_->SendRequestSynch(torqueReqFrame);
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return;
   }
 }
 
 short AgibotHandO12::GetJointMotorTorque(unsigned char joint_motor_index) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eTorqueCtrl);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eTorqueCtrl);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  short torque{};
+    short torque{};
 
-  CanfdFrame torqueReqFrame{};
-  torqueReqFrame.can_id_ = unCanId.ui_can_id_;
-  torqueReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
+    CanfdFrame torqueReqFrame{};
+    torqueReqFrame.can_id_ = unCanId.ui_can_id_;
+    torqueReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
 
-  try {
-    CanfdFrame torqueRepFrame = canfd_device_->SendRequestSynch(torqueReqFrame);
-    memcpy(&torque, torqueRepFrame.data_, sizeof(torque));
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    try {
+      CanfdFrame torqueRepFrame = canfd_device_->SendRequestSynch(torqueReqFrame);
+      memcpy(&torque, torqueRepFrame.data_, sizeof(torque));
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+
+    return torque;
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return 0;
   }
-
-  return torque;
 }
 
 void AgibotHandO12::SetAllJointMotorTorque(std::vector<short> vec_torque) {
@@ -222,46 +242,56 @@ std::vector<short> AgibotHandO12::GetAllJointMotorTorque() {
 }
 
 void AgibotHandO12::SetJointMotorVelo(unsigned char joint_motor_index, short velo) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eVeloCtrl);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eVeloCtrl);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  CanfdFrame veloReqFrame{};
-  veloReqFrame.can_id_ = unCanId.ui_can_id_;
-  veloReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
-  memcpy(veloReqFrame.data_, &velo, sizeof(velo));
-  try {
-    CanfdFrame veloRepFrame = canfd_device_->SendRequestSynch(veloReqFrame);
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame veloReqFrame{};
+    veloReqFrame.can_id_ = unCanId.ui_can_id_;
+    veloReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
+    memcpy(veloReqFrame.data_, &velo, sizeof(velo));
+    try {
+      CanfdFrame veloRepFrame = canfd_device_->SendRequestSynch(veloReqFrame);
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return;
   }
 }
 
 short AgibotHandO12::GetJointMotorVelo(unsigned char joint_motor_index) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eVeloCtrl);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eVeloCtrl);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  short velo{};
+    short velo{};
 
-  CanfdFrame veloReqFrame{};
-  veloReqFrame.can_id_ = unCanId.ui_can_id_;
-  veloReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
+    CanfdFrame veloReqFrame{};
+    veloReqFrame.can_id_ = unCanId.ui_can_id_;
+    veloReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
 
-  try {
-    CanfdFrame veloRepFrame = canfd_device_->SendRequestSynch(veloReqFrame);
-    memcpy(&velo, veloRepFrame.data_, sizeof(velo));
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    try {
+      CanfdFrame veloRepFrame = canfd_device_->SendRequestSynch(veloReqFrame);
+      memcpy(&velo, veloRepFrame.data_, sizeof(velo));
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+
+    return velo;
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return 0;
   }
-
-  return velo;
 }
 
 void AgibotHandO12::SetAllJointMotorVelo(std::vector<short> vec_velo) {
@@ -333,41 +363,51 @@ TouchSensorData AgibotHandO12::GetTouchSensorData(EFinger eFinger) {
 }
 
 void AgibotHandO12::SetControlMode(unsigned char joint_motor_index, EControlMode mode) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCtrlMode);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCtrlMode);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  CanfdFrame ctlModeReq{};
-  ctlModeReq.can_id_ = unCanId.ui_can_id_;
-  ctlModeReq.len_ = CANFD_MAX_DATA_LENGTH;
-  unsigned char ucMode = static_cast<unsigned char>(mode);
-  memcpy(ctlModeReq.data_, &ucMode, sizeof(ucMode));
-  try {
-    CanfdFrame ctlModeRep = canfd_device_->SendRequestSynch(ctlModeReq);
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame ctlModeReq{};
+    ctlModeReq.can_id_ = unCanId.ui_can_id_;
+    ctlModeReq.len_ = CANFD_MAX_DATA_LENGTH;
+    unsigned char ucMode = static_cast<unsigned char>(mode);
+    memcpy(ctlModeReq.data_, &ucMode, sizeof(ucMode));
+    try {
+      CanfdFrame ctlModeRep = canfd_device_->SendRequestSynch(ctlModeReq);
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return;
   }
 }
 
 EControlMode AgibotHandO12::GetControlMode(unsigned char joint_motor_index) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCtrlMode);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCtrlMode);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  CanfdFrame ctlModeReq{};
-  ctlModeReq.can_id_ = unCanId.ui_can_id_;
-  ctlModeReq.len_ = CANFD_MAX_DATA_LENGTH;
-  try {
-    CanfdFrame ctlModeRep = canfd_device_->SendRequestSynch(ctlModeReq);
-    return static_cast<EControlMode>(ctlModeRep.data_[0] & 0x07);
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame ctlModeReq{};
+    ctlModeReq.can_id_ = unCanId.ui_can_id_;
+    ctlModeReq.len_ = CANFD_MAX_DATA_LENGTH;
+    try {
+      CanfdFrame ctlModeRep = canfd_device_->SendRequestSynch(ctlModeReq);
+      return static_cast<EControlMode>(ctlModeRep.data_[0] & 0x07);
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+      return EControlMode::eUnknown;
+    }
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
     return EControlMode::eUnknown;
   }
 }
@@ -417,46 +457,56 @@ std::vector<unsigned char> AgibotHandO12::GetAllControlMode() {
 }
 
 void AgibotHandO12::SetCurrentThreshold(unsigned char joint_motor_index, short current_threshold) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCurrentThreshold);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCurrentThreshold);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  CanfdFrame currentThreshReqFrame{};
-  currentThreshReqFrame.can_id_ = unCanId.ui_can_id_;
-  currentThreshReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
-  memcpy(currentThreshReqFrame.data_, &current_threshold, sizeof(current_threshold));
-  try {
-    CanfdFrame currentThreshRepFrame = canfd_device_->SendRequestSynch(currentThreshReqFrame);
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame currentThreshReqFrame{};
+    currentThreshReqFrame.can_id_ = unCanId.ui_can_id_;
+    currentThreshReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
+    memcpy(currentThreshReqFrame.data_, &current_threshold, sizeof(current_threshold));
+    try {
+      CanfdFrame currentThreshRepFrame = canfd_device_->SendRequestSynch(currentThreshReqFrame);
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return;
   }
 }
 
 short AgibotHandO12::GetCurrentThreshold(unsigned char joint_motor_index) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCurrentThreshold);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCurrentThreshold);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  short currentThreshold{};
+    short currentThreshold{};
 
-  CanfdFrame currentThreshReqFrame{};
-  currentThreshReqFrame.can_id_ = unCanId.ui_can_id_;
-  currentThreshReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
+    CanfdFrame currentThreshReqFrame{};
+    currentThreshReqFrame.can_id_ = unCanId.ui_can_id_;
+    currentThreshReqFrame.len_ = CANFD_MAX_DATA_LENGTH;
 
-  try {
-    CanfdFrame currentThreshRepFrame = canfd_device_->SendRequestSynch(currentThreshReqFrame);
-    memcpy(&currentThreshold, currentThreshRepFrame.data_, sizeof(currentThreshold));
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    try {
+      CanfdFrame currentThreshRepFrame = canfd_device_->SendRequestSynch(currentThreshReqFrame);
+      memcpy(&currentThreshold, currentThreshRepFrame.data_, sizeof(currentThreshold));
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+
+    return currentThreshold;
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return {};
   }
-
-  return currentThreshold;
 }
 
 void AgibotHandO12::SetAllCurrentThreshold(std::vector<short> vec_current_threshold) {
@@ -568,26 +618,31 @@ void AgibotHandO12::MixCtrlJointMotor(std::vector<MixCtrl> vec_mix_ctrl) {
 }
 
 JointMotorErrorReport AgibotHandO12::GetErrorReport(unsigned char joint_motor_index) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eErrorReport);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eErrorReport);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  JointMotorErrorReport errReport{};
+    JointMotorErrorReport errReport{};
 
-  CanfdFrame errReportReq{};
-  errReportReq.can_id_ = unCanId.ui_can_id_;
-  errReportReq.len_ = CANFD_MAX_DATA_LENGTH;
-  try {
-    CanfdFrame errReportRep = canfd_device_->SendRequestSynch(errReportReq);
-    memcpy(&errReport, errReportRep.data_, sizeof(errReport));
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame errReportReq{};
+    errReportReq.can_id_ = unCanId.ui_can_id_;
+    errReportReq.len_ = CANFD_MAX_DATA_LENGTH;
+    try {
+      CanfdFrame errReportRep = canfd_device_->SendRequestSynch(errReportReq);
+      memcpy(&errReport, errReportRep.data_, sizeof(errReport));
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+
+    return errReport;
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return {};
   }
-
-  return errReport;
 }
 
 std::vector<JointMotorErrorReport> AgibotHandO12::GetAllErrorReport() {
@@ -611,21 +666,26 @@ std::vector<JointMotorErrorReport> AgibotHandO12::GetAllErrorReport() {
 }
 
 void AgibotHandO12::SetErrorReportPeriod(unsigned char joint_motor_index, unsigned short period) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eErrorReport);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eErrorReport);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  CanfdFrame errReportReq{};
-  errReportReq.can_id_ = unCanId.ui_can_id_;
-  errReportReq.len_ = CANFD_MAX_DATA_LENGTH;
-  memcpy(errReportReq.data_, &period, sizeof(period));
-  try {
-    canfd_device_->SendRequestWithoutReply(errReportReq);
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame errReportReq{};
+    errReportReq.can_id_ = unCanId.ui_can_id_;
+    errReportReq.len_ = CANFD_MAX_DATA_LENGTH;
+    memcpy(errReportReq.data_, &period, sizeof(period));
+    try {
+      canfd_device_->SendRequestWithoutReply(errReportReq);
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return;
   }
 }
 
@@ -654,11 +714,16 @@ void AgibotHandO12::SetAllErrorReportPeriod(std::vector<unsigned short> vec_peri
 }
 
 unsigned short AgibotHandO12::GetTemperatureReport(unsigned char joint_motor_index) {
-  if (joint_motor_index > 0 && joint_motor_index <= 12) {
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
     std::lock_guard<std::mutex> lockGuard(mutex_temper_report_);
-    return vec_temper_report_[joint_motor_index];
+    if (vec_temper_report_.size() == DEGREE_OF_FREEDOM) {
+      return vec_temper_report_[joint_motor_index];
+    } else {
+      return {};
+    }
   } else {
-    return 0;
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return {};
   }
 }
 
@@ -668,21 +733,26 @@ std::vector<unsigned short> AgibotHandO12::GetAllTemperatureReport() {
 }
 
 void AgibotHandO12::SetTemperReportPeriod(unsigned char joint_motor_index, unsigned short period) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eTemperatureReport);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eTemperatureReport);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  CanfdFrame temperReportReq{};
-  temperReportReq.can_id_ = unCanId.ui_can_id_;
-  temperReportReq.len_ = CANFD_MAX_DATA_LENGTH;
-  memcpy(&temperReportReq.data_, &period, sizeof(period));
-  try {
-    CanfdFrame temperReportRep = canfd_device_->SendRequestSynch(temperReportReq);
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame temperReportReq{};
+    temperReportReq.can_id_ = unCanId.ui_can_id_;
+    temperReportReq.len_ = CANFD_MAX_DATA_LENGTH;
+    memcpy(&temperReportReq.data_, &period, sizeof(period));
+    try {
+      CanfdFrame temperReportRep = canfd_device_->SendRequestSynch(temperReportReq);
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return;
   }
 }
 
@@ -714,11 +784,16 @@ void AgibotHandO12::SetAllTemperReportPeriod(std::vector<unsigned short> vec_per
 }
 
 short AgibotHandO12::GetCurrentReport(unsigned char joint_motor_index) {
-  if (joint_motor_index > 0 && joint_motor_index <= 12) {
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
     std::lock_guard<std::mutex> lockGuard(mutex_current_report_);
-    return vec_current_report_[joint_motor_index];
+    if (vec_current_report_.size() == DEGREE_OF_FREEDOM) {
+      return vec_current_report_[joint_motor_index];
+    } else {
+      return {};
+    }
   } else {
-    return 0;
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return {};
   }
 }
 
@@ -728,21 +803,26 @@ std::vector<unsigned short> AgibotHandO12::GetAllCurrentReport() {
 }
 
 void AgibotHandO12::SetCurrentReportPeriod(unsigned char joint_motor_index, unsigned short period) {
-  UnCanId unCanId{};
-  unCanId.st_can_Id_.device_id_ = device_id_;
-  unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
-  unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
-  unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCurrentReport);
-  unCanId.st_can_Id_.msg_id_ = joint_motor_index;
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    UnCanId unCanId{};
+    unCanId.st_can_Id_.device_id_ = device_id_;
+    unCanId.st_can_Id_.rw_flag_ = CANID_WRITE_FLAG;
+    unCanId.st_can_Id_.product_id_ = CANID_PRODUCT_ID;
+    unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eCurrentReport);
+    unCanId.st_can_Id_.msg_id_ = joint_motor_index;
 
-  CanfdFrame currentReportReq{};
-  currentReportReq.can_id_ = unCanId.ui_can_id_;
-  currentReportReq.len_ = CANFD_MAX_DATA_LENGTH;
-  memcpy(&currentReportReq.data_, &period, sizeof(period));
-  try {
-    canfd_device_->SendRequestWithoutReply(currentReportReq);
-  } catch (std::exception& ex) {
-    std::cerr << ex.what() << std::endl;
+    CanfdFrame currentReportReq{};
+    currentReportReq.can_id_ = unCanId.ui_can_id_;
+    currentReportReq.len_ = CANFD_MAX_DATA_LENGTH;
+    memcpy(&currentReportReq.data_, &period, sizeof(period));
+    try {
+      canfd_device_->SendRequestWithoutReply(currentReportReq);
+    } catch (std::exception& ex) {
+      std::cerr << ex.what() << std::endl;
+    }
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return;
   }
 }
 
