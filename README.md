@@ -46,8 +46,8 @@ DBUILD_PYTHON_BINDING is used to enable Python binding module compilation, and B
 
 ```bash
 # Download the corresponding version of python whl package from GitHub
-# Example: agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
-pip install agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
+# Example: agibot_hand_py-0.8.0-cp310-cp310-linux_x86_64.whl
+pip install agibot_hand_py-0.8.0-cp310-cp310-linux_x86_64.whl
 ```
 
 ## Dexterous Hand Motor Index
@@ -121,5 +121,5 @@ Copyright (c) 2025 Agibot Co., Ltd. OmniHand Pro 2025 SDK is licensed under Mula
 
 ---
 
-_Document Version: v1.0.0_
+_Document Version: v0.8.0_
 _Last Updated: 2025-8_

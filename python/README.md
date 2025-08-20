@@ -40,10 +40,10 @@ pip3 install build setuptools wheel
 
 ### 2. SDK 安装
 
-到 xxxxx.git 下载对应版本的 python whl 包，如 agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
+到 xxxxx.git 下载对应版本的 python whl 包，如 agibot_hand_py-0.8.0-cp310-cp310-linux_x86_64.whl
 
 ```bash
-pip install agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl --force-reinstall
+pip install agibot_hand_py-0.8.0-cp310-cp310-linux_x86_64.whl --force-reinstall
 ```
 
 ## 快速开始

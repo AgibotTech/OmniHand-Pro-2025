@@ -46,8 +46,8 @@ DBUILD_PYTHON_BINDING 选项用于构建 Python 绑定模块，DBUILD_CPP_EXAMPL
 
 ```bash
 # 从GitHub下载对应版本的python whl包
-# 例如：agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
-pip install agibot_hand_py-1.0.0-cp310-cp310-linux_x86_64.whl
+# 例如：agibot_hand_py-0.8.0-cp310-cp310-linux_x86_64.whl
+pip install agibot_hand_py-0.8.0-cp310-cp310-linux_x86_64.whl
 ```
 
 ## 灵巧手电机索引
@@ -121,5 +121,5 @@ Copyright (c) 2025 Agibot Co., Ltd. OmniHand Pro 2025 SDK is licensed under Mula
 
 ---
 
-_本文档版本：v1.0.0_  
+_本文档版本：v0.8.0_  
 _最后更新：2025-8_
