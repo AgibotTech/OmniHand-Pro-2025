@@ -17,9 +17,7 @@ endif()
 
 add_library(omniHandPro25Can SHARED ${MODULE_SOURCES})
 
-set_target_properties(omniHandPro25Can PROPERTIES
-  INSTALL_RPATH "$ORIGIN"
-  BUILD_WITH_INSTALL_RPATH TRUE)
+set_target_properties(omniHandPro25Can PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
 
 if(CanfdDevice EQUAL 1)
   target_compile_definitions(omniHandPro25Can PRIVATE ZLG_USBCANFD_SDK)

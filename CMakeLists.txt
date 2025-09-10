@@ -39,6 +39,7 @@ endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+include(GetSerial)
 
 # find python dependencies
 if(BUILD_PYTHON_BINDING)
