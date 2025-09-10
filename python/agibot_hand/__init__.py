@@ -25,9 +25,15 @@ class EControlMode(IntEnum):
     POSITION_VELOCITY_TORQUE = 5
     UNKNOWN = 10
 
+class EHandType(IntEnum):
+    LEFT = 0
+    RIGHT = 1
+    UNKNOWN = 10
+
 __all__ = [
     'AgibotHandO12',
     'EFinger',
+    'EHandType',
     'EControlMode',
     'TouchSensorData',
     'JointMotorErrorReport',

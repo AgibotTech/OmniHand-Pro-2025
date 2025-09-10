@@ -61,6 +61,12 @@ struct AGIBOT_EXPORT TouchSensorData {
   unsigned char capa_approach_[4];      // 自电容接近
 };
 
+enum class AGIBOT_EXPORT EHandType : unsigned char {
+  eLeft = 0,
+  eRight = 1,
+  eUnknown = 10
+};
+
 enum class AGIBOT_EXPORT EControlMode : unsigned char {
   ePosi = 0,
   eVelo = 1,

@@ -28,8 +28,10 @@
 
 #define DEGREE_OF_FREEDOM 12
 
-AgibotHandO12::AgibotHandO12(unsigned char device_id)
+AgibotHandO12::AgibotHandO12(unsigned char device_id, EHandType hand_type)
     : device_id_(device_id) {
+  is_left_hand_ = hand_type == EHandType::eLeft;
+
 #ifdef ZLG_USBCANFD_SDK
   canfd_device_ = std::make_unique<ZlgUsbcanfdSDK>();
 #endif
@@ -40,6 +42,8 @@ AgibotHandO12::AgibotHandO12(unsigned char device_id)
   canfd_device_->SetCallback(std::bind(&AgibotHandO12::ProcessMsg, this, std::placeholders::_1));
   canfd_device_->SetCalcuMatchRepId(std::bind(&AgibotHandO12::GetMatchedRepId, this, std::placeholders::_1));
   canfd_device_->SetMsgMatchJudge(std::bind(&AgibotHandO12::JudgeMsgMatch, this, std::placeholders::_1, std::placeholders::_2));
+
+  kinematics_solver_ptr_ = std::make_unique<omnihandProSDK::O12KinematicsSolver>(is_left_hand_);
 }
 
 AgibotHandO12::~AgibotHandO12() {
@@ -141,6 +145,74 @@ std::vector<short> AgibotHandO12::GetAllJointMotorPosi() {
     std::cerr << ex.what() << std::endl;
     return {};
   }
+}
+
+void AgibotHandO12::SetJointAngle(unsigned char joint_motor_index, double angle) {
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    // 获取当前所有关节角度
+    std::vector<double> current_angles = GetAllJointAngles();
+    for (auto a : current_angles) {
+      std::cout << " | " << a << std::endl;
+    }
+
+    // 更新指定关节的角度
+    current_angles[joint_motor_index - 1] = angle;
+
+    // 转换为电机位置并设置
+    std::vector<int> motor_positions = kinematics_solver_ptr_->ConvertJoint2Actuator(current_angles);
+    SetJointMotorPosi(joint_motor_index, static_cast<short>(motor_positions[joint_motor_index - 1]));
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return;
+  }
+}
+
+double AgibotHandO12::GetJointAngle(unsigned char joint_motor_index) {
+  if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
+    // 获取当前电机位置
+    short motor_posi = GetJointMotorPosi(joint_motor_index);
+
+    // 获取所有电机位置
+    std::vector<short> all_motor_posi = GetAllJointMotorPosi();
+
+    // 转换为int向量供运动学求解器使用
+    std::vector<int> motor_positions(all_motor_posi.begin(), all_motor_posi.end());
+
+    // 转换为关节角度
+    std::vector<double> joint_angles = kinematics_solver_ptr_->ConvertActuator2Joint(motor_positions);
+
+    return joint_angles[joint_motor_index - 1];
+  } else {
+    std::cerr << "[Error]: 无效关节电机ID参数" << std::dec << static_cast<unsigned int>(joint_motor_index) << " 正确范围：1～" << DEGREE_OF_FREEDOM << "." << std::endl;
+    return 0.0;
+  }
+}
+
+void AgibotHandO12::SetAllJointAngles(std::vector<double> vec_angle) {
+  if (vec_angle.size() != DEGREE_OF_FREEDOM) {
+    std::cerr << "[Error]: 无效参数，需与主动自由度数量 " << std::dec << DEGREE_OF_FREEDOM << " 相匹配." << std::endl;
+    return;
+  }
+
+  // 使用运动学求解器转换关节角度为电机位置
+  std::vector<int> motor_positions = kinematics_solver_ptr_->ConvertJoint2Actuator(vec_angle);
+
+  // 转换为short向量
+  std::vector<short> motor_posi_short(motor_positions.begin(), motor_positions.end());
+
+  // 设置所有电机位置
+  SetAllJointMotorPosi(motor_posi_short);
+}
+
+std::vector<double> AgibotHandO12::GetAllJointAngles() {
+  // 获取所有电机位置
+  std::vector<short> motor_posi = GetAllJointMotorPosi();
+
+  // 转换为int向量供运动学求解器使用
+  std::vector<int> motor_positions(motor_posi.begin(), motor_posi.end());
+
+  // 使用运动学求解器转换电机位置为关节角度
+  return kinematics_solver_ptr_->ConvertActuator2Joint(motor_positions);
 }
 
 void AgibotHandO12::SetJointMotorTorque(unsigned char joint_motor_index, short torque) {

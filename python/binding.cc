@@ -68,14 +68,21 @@ PYBIND11_MODULE(agibot_hand_core, m) {
       .def_readwrite("tgt_velo", &MixCtrl::tgt_velo_)
       .def_readwrite("tgt_torque", &MixCtrl::tgt_torque_);
 
-  //  Bind main class
+  //  Bind main class with custom constructor
   py::class_<AgibotHandO12>(m, "AgibotHandO12")
-      .def(py::init<unsigned char>(), py::arg("device_id") = DEFAULT_DEVICE_ID)
+      .def(py::init([](unsigned char device_id, int hand_type) {
+             return new AgibotHandO12(device_id, static_cast<EHandType>(hand_type));
+           }),
+           py::arg("device_id") = DEFAULT_DEVICE_ID, py::arg("hand_type") = 0)
       .def("set_device_id", &AgibotHandO12::SetDeviceId)
       .def("set_joint_position", &AgibotHandO12::SetJointMotorPosi)
       .def("get_joint_position", &AgibotHandO12::GetJointMotorPosi)
       .def("set_all_joint_positions", &AgibotHandO12::SetAllJointMotorPosi)
       .def("get_all_joint_positions", &AgibotHandO12::GetAllJointMotorPosi)
+      .def("set_joint_angle", &AgibotHandO12::SetJointAngle)
+      .def("get_joint_angle", &AgibotHandO12::GetJointAngle)
+      .def("set_all_joint_angles", &AgibotHandO12::SetAllJointAngles)
+      .def("get_all_joint_angles", &AgibotHandO12::GetAllJointAngles)
       .def("set_joint_velocity", &AgibotHandO12::SetJointMotorVelo)
       .def("get_joint_velocity", &AgibotHandO12::GetJointMotorVelo)
       .def("set_all_joint_velocities", &AgibotHandO12::SetAllJointMotorVelo)

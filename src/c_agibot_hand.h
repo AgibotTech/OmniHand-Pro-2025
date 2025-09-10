@@ -14,6 +14,7 @@
 #include <queue>
 
 #include "can_bus_device/c_can_bus_device.h"
+#include "kinematics_solver/kinematics_solver.h"
 #include "proto.h"
 
 #include "export_symbols.h"
@@ -29,7 +30,7 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @brief 构造函数
    * @param device_id 设备Id
    */
-  explicit AgibotHandO12(unsigned char device_id);
+  explicit AgibotHandO12(unsigned char device_id, EHandType hand_type);
 
   ~AgibotHandO12();
 
@@ -77,6 +78,33 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @return
    */
   std::vector<short> GetAllJointMotorPosi();
+
+  /**
+   * @brief 设置单个关节的关节角
+   * @param joint_motor_index 关节电机索引
+   * @param angle 关节角度(单位：弧度)
+   */
+  void SetJointAngle(unsigned char joint_motor_index, double angle);
+
+  /**
+   * @brief 获取单个关节的关节角
+   * @param joint_motor_index
+   * @return
+   */
+  double GetJointAngle(unsigned char joint_motor_index);
+
+  /**
+   * @brief 批量设置所有关节的关节角
+   * @note 注意要提供完整的12个关节电机的关节角数据
+   * @param vec_angle
+   */
+  void SetAllJointAngles(std::vector<double> vec_angle);
+
+  /**
+   * @brief 批量获取所有关节的关节角
+   * @return
+   */
+  std::vector<double> GetAllJointAngles();
 
   /**
    * @brief 设置单个关节电机力矩
@@ -347,6 +375,16 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @brief 设备Id
    */
   unsigned char device_id_{};
+
+  /**
+   * @brief 是否为左手
+   */
+  bool is_left_hand_{true};
+
+  /**
+   * @brief O12运动学求解器
+   */
+  std::unique_ptr<omnihandProSDK::O12KinematicsSolver> kinematics_solver_ptr_;
 };
 
 #endif  // C_AGIBOT_HAND_H
