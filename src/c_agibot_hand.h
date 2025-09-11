@@ -21,6 +21,8 @@
 
 #define DEFAULT_DEVICE_ID 0x01
 
+#define DISABLE_FUNC 1
+
 /**
  * @brief O12灵巧手类
  */
@@ -79,7 +81,7 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @return
    */
   std::vector<short> GetAllJointMotorPosi();
-
+#if !DISABLE_FUNC
   /**
    * @brief 设置单个关节的关节角
    * @param joint_motor_index 关节电机索引
@@ -93,7 +95,7 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @return
    */
   double GetJointAngle(unsigned char joint_motor_index);
-
+#endif
   /**
    * @brief 批量设置所有关节的关节角
    * @note 注意要提供完整的12个关节电机的关节角数据
@@ -107,6 +109,7 @@ class AGIBOT_EXPORT AgibotHandO12 {
    */
   std::vector<double> GetAllJointAngles();
 
+#if !DISABLE_FUNC
   /**
    * @brief 设置单个关节电机力矩
    * @param joint_motor_index
@@ -132,7 +135,7 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @return
    */
   std::vector<short> GetAllJointMotorTorque();
-
+#endif
   /**
    * @brief 设置单个关节电机速度
    * @param joint_motor_index

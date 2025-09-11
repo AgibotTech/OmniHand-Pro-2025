@@ -146,7 +146,7 @@ std::vector<short> AgibotHandO12::GetAllJointMotorPosi() {
     return {};
   }
 }
-
+#if !DISABLE_FUNC
 void AgibotHandO12::SetJointAngle(unsigned char joint_motor_index, double angle) {
   if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
     // 获取当前所有关节角度
@@ -187,6 +187,7 @@ double AgibotHandO12::GetJointAngle(unsigned char joint_motor_index) {
     return 0.0;
   }
 }
+#endif
 
 void AgibotHandO12::SetAllJointAngles(std::vector<double> vec_angle) {
   if (vec_angle.size() != DEGREE_OF_FREEDOM) {
@@ -215,6 +216,7 @@ std::vector<double> AgibotHandO12::GetAllJointAngles() {
   return kinematics_solver_ptr_->ConvertActuator2Joint(motor_positions);
 }
 
+#if !DISABLE_FUNC
 void AgibotHandO12::SetJointMotorTorque(unsigned char joint_motor_index, short torque) {
   if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
     UnCanId unCanId{};
@@ -312,6 +314,7 @@ std::vector<short> AgibotHandO12::GetAllJointMotorTorque() {
     return {};
   }
 }
+#endif
 
 void AgibotHandO12::SetJointMotorVelo(unsigned char joint_motor_index, short velo) {
   if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {

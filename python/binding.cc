@@ -113,18 +113,22 @@ PYBIND11_MODULE(agibot_hand_core, m) {
       .def("get_joint_position", &AgibotHandO12::GetJointMotorPosi)
       .def("set_all_joint_positions", &AgibotHandO12::SetAllJointMotorPosi)
       .def("get_all_joint_positions", &AgibotHandO12::GetAllJointMotorPosi)
+#if !DISABLE_FUNC
       .def("set_joint_angle", &AgibotHandO12::SetJointAngle)
       .def("get_joint_angle", &AgibotHandO12::GetJointAngle)
+#endif
       .def("set_all_joint_angles", &AgibotHandO12::SetAllJointAngles)
       .def("get_all_joint_angles", &AgibotHandO12::GetAllJointAngles)
       .def("set_joint_velocity", &AgibotHandO12::SetJointMotorVelo)
       .def("get_joint_velocity", &AgibotHandO12::GetJointMotorVelo)
       .def("set_all_joint_velocities", &AgibotHandO12::SetAllJointMotorVelo)
       .def("get_all_joint_velocities", &AgibotHandO12::GetAllJointMotorVelo)
+#if !DISABLE_FUNC
       .def("set_joint_torque", &AgibotHandO12::SetJointMotorTorque)
       .def("get_joint_torque", &AgibotHandO12::GetJointMotorTorque)
       .def("set_all_joint_torques", &AgibotHandO12::SetAllJointMotorTorque)
       .def("get_all_joint_torques", &AgibotHandO12::GetAllJointMotorTorque)
+#endif
       .def("get_touch_sensor_data", [](AgibotHandO12 &self, int finger_index) {
         return self.GetTouchSensorData(static_cast<EFinger>(finger_index));
       })
