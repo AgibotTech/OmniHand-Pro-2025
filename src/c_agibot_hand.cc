@@ -1043,7 +1043,7 @@ void AgibotHandO12::ProcessMsg(CanfdFrame frame) {
   }
 }
 
-std::string AgibotHandO12::GetVendorInfo() {
+VendorInfo AgibotHandO12::GetVendorInfo() {
   UnCanId unCanId{};
   unCanId.st_can_Id_.device_id_ = device_id_;
   unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
@@ -1051,39 +1051,34 @@ std::string AgibotHandO12::GetVendorInfo() {
   unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eVendorInfo);
   unCanId.st_can_Id_.msg_id_ = 0x00;
 
-  std::string productModel;
-  std::string productSeqNum;
-  Version hardwareVersion{};
-  Version softwareVersion{};
-  short voltage;
-  unsigned char dof;
-
   CanfdFrame vendorInfoReq{};
   vendorInfoReq.can_id_ = unCanId.ui_can_id_;
   vendorInfoReq.len_ = CANFD_MAX_DATA_LENGTH;
+
   try {
     CanfdFrame rep = canfd_device_->SendRequestSynch(vendorInfoReq);
-    productModel = std::string((char*)rep.data_, 16);
-    productSeqNum = std::string((char*)rep.data_ + 16, 14);
-    memcpy(&hardwareVersion, rep.data_ + 30, sizeof(hardwareVersion));
-    memcpy(&softwareVersion, rep.data_ + 34, sizeof(softwareVersion));
-    memcpy(&voltage, rep.data_ + 38, sizeof(voltage));
-    memcpy(&dof, rep.data_ + 40, sizeof(dof));
 
-    std::stringstream sstream;
-    sstream << "产品型号：" << productModel << " 产品序列号：" << productSeqNum
-            << "\n硬件版本：" << (unsigned int)hardwareVersion.major_ << "." << (unsigned int)hardwareVersion.minor_ << "." << (unsigned int)hardwareVersion.patch_
-            << " 软件版本：" << (unsigned int)softwareVersion.major_ << "." << (unsigned int)softwareVersion.minor_ << "." << (unsigned int)softwareVersion.patch_
-            << "\n供电电压：" << voltage << "mV"
-            << " 主动自由度：" << (unsigned int)dof << std::endl;
-    return sstream.str();
+    VendorInfo info;
+    info.productModel = std::string(reinterpret_cast<char*>(rep.data_), 16);
+    info.productSeqNum = std::string(reinterpret_cast<char*>(rep.data_) + 16, 14);
+
+    // handware version：4bytes [major_, minor_, patch_, res_]
+    memcpy(&info.hardwareVersion, rep.data_ + 30, sizeof(Version));
+
+    // software version：4bytes [major_, minor_, patch_, res_]
+    memcpy(&info.softwareVersion, rep.data_ + 34, sizeof(Version));
+
+    memcpy(&info.voltage, rep.data_ + 38, sizeof(info.voltage));
+    memcpy(&info.dof, rep.data_ + 40, sizeof(info.dof));
+
+    return info;
   } catch (std::exception& ex) {
     std::cerr << ex.what() << std::endl;
     return {};
   }
 }
 
-std::string AgibotHandO12::GetDeviceInfo() {
+DeviceInfo AgibotHandO12::GetDeviceInfo() {
   UnCanId unCanId{};
   unCanId.st_can_Id_.device_id_ = device_id_;
   unCanId.st_can_Id_.rw_flag_ = CANID_READ_FLAG;
@@ -1091,32 +1086,21 @@ std::string AgibotHandO12::GetDeviceInfo() {
   unCanId.st_can_Id_.msg_type_ = static_cast<unsigned char>(EMsgType::eDeviceInfo);
   unCanId.st_can_Id_.msg_id_ = 0x00;
 
-  unsigned char deviceId{};
-  CommuParams commuParams{};
-
-  std::vector<std::string> vecBitrate = {"125Kbps", "500Kbps", "1Mbps", "5Mbps"};
-  std::vector<std::string> vecSamplePoint = {"75.0%", "80.0%", "87.5%"};
-
   CanfdFrame vendorInfoReq{};
   vendorInfoReq.can_id_ = unCanId.ui_can_id_;
   vendorInfoReq.len_ = CANFD_MAX_DATA_LENGTH;
+
   try {
     CanfdFrame rep = canfd_device_->SendRequestSynch(vendorInfoReq);
-    deviceId = rep.data_[0];
-    memcpy(&commuParams, rep.data_ + 1, sizeof(commuParams));
 
-    std::stringstream sstream;
-    sstream << "设备ID：" << (unsigned int)deviceId
-            << "\n仲裁域波特率：" << vecBitrate[commuParams.bitrate_] << "."
-            << "仲裁域采样点：" << vecSamplePoint[commuParams.sample_point_]
-            << "\n数据域波特率：" << vecBitrate[commuParams.dbitrate_] << "."
-            << "数据域采样点：" << vecSamplePoint[commuParams.dsample_point_]
-            << std::endl;
+    DeviceInfo deviceInfo;
+    deviceInfo.deviceId = rep.data_[0];
+    memcpy(&deviceInfo.commuParams, rep.data_ + 1, sizeof(CommuParams));
 
-    return sstream.str();
+    return deviceInfo;
   } catch (std::exception& ex) {
     std::cerr << ex.what() << std::endl;
-    return {};
+    return DeviceInfo{};
   }
 }
 

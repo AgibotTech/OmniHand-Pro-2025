@@ -12,7 +12,9 @@
 #define PROTO_H
 
 #include <optional>
-
+#include <sstream>
+#include <string>
+#include <vector>
 #include "export_symbols.h"
 
 #pragma pack(push, 1)
@@ -109,11 +111,53 @@ struct AGIBOT_EXPORT Version {
   unsigned char res_;
 };
 
+struct AGIBOT_EXPORT VendorInfo {
+  std::string productModel;   // 产品型号
+  std::string productSeqNum;  // 产品序列号
+  Version hardwareVersion;    // 硬件版本
+  Version softwareVersion;    // 软件版本
+  int16_t voltage;            // 供电电压(mV)
+  unsigned char dof;          // 主动自由度
+
+  std::string toString() const {
+    std::stringstream sstream;
+    sstream << "Product Model: " << productModel
+            << "\nSerial Number: " << productSeqNum
+            << "\nHardware Version: " << static_cast<unsigned int>(hardwareVersion.major_)
+            << "." << static_cast<unsigned int>(hardwareVersion.minor_)
+            << "." << static_cast<unsigned int>(hardwareVersion.patch_)
+            << "\nSoftware Version: " << static_cast<unsigned int>(softwareVersion.major_)
+            << "." << static_cast<unsigned int>(softwareVersion.minor_)
+            << "." << static_cast<unsigned int>(softwareVersion.patch_)
+            << "\nSupply Voltage: " << voltage << "mV"
+            << "\nActive Degrees of Freedom: " << static_cast<unsigned int>(dof);
+    return sstream.str();
+  }
+};
+
 struct AGIBOT_EXPORT CommuParams {
   unsigned char bitrate_;
   unsigned char sample_point_;
   unsigned char dbitrate_;
   unsigned char dsample_point_;
+};
+
+struct AGIBOT_EXPORT DeviceInfo {
+  unsigned char deviceId;   // 设备ID
+  CommuParams commuParams;  // 通信参数
+
+  std::string toString() const {
+    std::vector<std::string> vecBitrate = {"125Kbps", "500Kbps", "1Mbps", "5Mbps"};
+    std::vector<std::string> vecSamplePoint = {"75.0%", "80.0%", "87.5%"};
+
+    std::stringstream sstream;
+    sstream << "Device ID: " << static_cast<unsigned int>(deviceId)
+            << "\nArbitration Bitrate: " << vecBitrate[commuParams.bitrate_]
+            << "\nArbitration Sample Point: " << vecSamplePoint[commuParams.sample_point_]
+            << "\nData Bitrate: " << vecBitrate[commuParams.dbitrate_]
+            << "\nData Sample Point: " << vecSamplePoint[commuParams.dsample_point_];
+    return sstream.str();
+  }
 };
 
 struct AGIBOT_EXPORT OTAUpgradeReq {

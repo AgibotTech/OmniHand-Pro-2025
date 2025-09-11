@@ -29,6 +29,7 @@ class AGIBOT_EXPORT AgibotHandO12 {
   /**
    * @brief 构造函数
    * @param device_id 设备Id
+   * @param hand_type 手型(左手/右手)
    */
   explicit AgibotHandO12(unsigned char device_id, EHandType hand_type);
 
@@ -36,15 +37,15 @@ class AGIBOT_EXPORT AgibotHandO12 {
 
   /**
    * @brief 获取厂家信息
-   * @return 厂家信息长字符串
+   * @return 厂家信息数据结构体
    */
-  std::string GetVendorInfo();
+  VendorInfo GetVendorInfo();
 
   /**
    * @brief 获取设备信息
-   * @return 设备信息长字符串
+   * @return 设备信息结构体
    */
-  std::string GetDeviceInfo();
+  DeviceInfo GetDeviceInfo();
 
   /**
    * @brief 设置设备Id

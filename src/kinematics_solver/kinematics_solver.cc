@@ -115,7 +115,6 @@ std::vector<int> O12KinematicsSolver::ConvertJoint2Actuator(
 std::vector<double> O12KinematicsSolver::ActiveJoint2MotorLength(
     const std::vector<double> &active_jont_pos) {
   std::vector<double> joint_pos = active_jont_pos;
-  std::cout << "======> " << hand_type_ << std::endl;
 
   // Convert joint angles to positive values
   if (hand_type_) {

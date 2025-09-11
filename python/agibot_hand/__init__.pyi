@@ -22,6 +22,44 @@ class EHandType(IntEnum):
     RIGHT = 1
     UNKNOWN = 10
 
+class Version:
+    major_: int
+    minor_: int
+    patch_: int
+    res_: int
+
+    def __init__(self) -> None: ...
+    
+    def __str__(self) -> str: ...
+
+class VendorInfo:
+    product_model: str
+    product_seq_num: str
+    hardware_version: Version
+    software_version: Version
+    voltage: int
+    dof: int
+
+    def __init__(self) -> None: ...
+    
+    def __str__(self) -> str: ...
+
+class CommuParams:
+    bitrate_: int
+    sample_point_: int
+    dbitrate_: int
+    dsample_point_: int
+
+    def __init__(self) -> None: ...
+
+class DeviceInfo:
+    device_id: int
+    commu_params: CommuParams
+
+    def __init__(self) -> None: ...
+    
+    def __str__(self) -> str: ...
+
 class TouchSensorData:
     online_state: int
     normal_force: int
@@ -122,8 +160,8 @@ class AgibotHandO12:
     def set_all_current_report_periods(self, vec_period: List[int]) -> None: ...
     
     # Device information
-    def get_vendor_info(self) -> str: ...
-    def get_device_info(self) -> str: ...
+    def get_vendor_info(self) -> VendorInfo: ...  
+    def get_device_info(self) -> DeviceInfo: ...
     
     # Data details display
     def show_data_details(self, show: bool) -> None: ...

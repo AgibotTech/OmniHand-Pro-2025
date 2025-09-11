@@ -10,6 +10,40 @@ namespace py = pybind11;
 PYBIND11_MODULE(agibot_hand_core, m) {
   m.doc() = "AgibotHandO12 Python Interface";
 
+  // Bind CommuParams structure
+  py::class_<CommuParams>(m, "CommuParams")
+      .def(py::init<>())
+      .def_readwrite("bitrate_", &CommuParams::bitrate_)
+      .def_readwrite("sample_point_", &CommuParams::sample_point_)
+      .def_readwrite("dbitrate_", &CommuParams::dbitrate_)
+      .def_readwrite("dsample_point_", &CommuParams::dsample_point_);
+
+  // Bind DeviceInfo structure
+  py::class_<DeviceInfo>(m, "DeviceInfo")
+      .def(py::init<>())
+      .def_readwrite("device_id", &DeviceInfo::deviceId)
+      .def_readwrite("commu_params", &DeviceInfo::commuParams)
+      .def("__str__", &DeviceInfo::toString);
+
+  //  Bind Version structure
+  py::class_<Version>(m, "Version")
+      .def(py::init<>())
+      .def_readwrite("major_", &Version::major_)
+      .def_readwrite("minor_", &Version::minor_)
+      .def_readwrite("patch_", &Version::patch_)
+      .def_readwrite("res_", &Version::res_);
+
+  //  Bind VendorInfo structure
+  py::class_<VendorInfo>(m, "VendorInfo")
+      .def(py::init<>())
+      .def_readwrite("product_model", &VendorInfo::productModel)
+      .def_readwrite("product_seq_num", &VendorInfo::productSeqNum)
+      .def_readwrite("hardware_version", &VendorInfo::hardwareVersion)
+      .def_readwrite("software_version", &VendorInfo::softwareVersion)
+      .def_readwrite("voltage", &VendorInfo::voltage)
+      .def_readwrite("dof", &VendorInfo::dof)
+      .def("__str__", &VendorInfo::toString);
+
   //  Bind TouchSensorData structures
   py::class_<TouchSensorData>(m, "TouchSensorData")
       .def(py::init<>())

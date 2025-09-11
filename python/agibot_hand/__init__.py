@@ -5,7 +5,11 @@ from .agibot_hand_core import (
     AgibotHandO12,
     TouchSensorData,
     JointMotorErrorReport,
-    MixCtrl
+    MixCtrl,
+    VendorInfo,   
+    Version,     
+    CommuParams,   
+    DeviceInfo     
 )
 from enum import IntEnum
 
@@ -37,5 +41,9 @@ __all__ = [
     'EControlMode',
     'TouchSensorData',
     'JointMotorErrorReport',
-    'MixCtrl'
+    'MixCtrl',
+    'VendorInfo',   
+    'Version',       
+    'CommuParams',   
+    'DeviceInfo'     
 ]
