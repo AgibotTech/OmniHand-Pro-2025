@@ -4,6 +4,11 @@
 #切换基于不同CAN盒和CAN卡的SDK还是socketCAN，1~ZLG周立功的usbcanfd的CAN盒SDK;2~socketCAN
 set(CanfdDevice 1)
 
+# 基于是否使用can(否则就是串口 todo 逻辑优化)
+
+set(USE_CAN_BUS 0)
+add_definitions(-DUSE_CAN_BUS=${USE_CAN_BUS})
+
 file(GLOB MODULE_SOURCES 
   ${CMAKE_CURRENT_SOURCE_DIR}/*.cc 
   ${CMAKE_CURRENT_SOURCE_DIR}/can_bus_device/*.cc
@@ -15,9 +20,14 @@ elseif(CanfdDevice EQUAL 2) #socketCAN
   list(APPEND MODULE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/can_bus_device/socket_can/c_can_bus_device_socket_can.cc)
 endif()
 
+list(APPEND MODULE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/rs_485_device/rs_485_device.cc)
+
 add_library(omniHandPro25Can SHARED ${MODULE_SOURCES})
 
 set_target_properties(omniHandPro25Can PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
+
+target_include_directories(omniHandPro25Can PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../_deps/serial-src/include)
+target_link_libraries(omniHandPro25Can PRIVATE serial)
 
 if(CanfdDevice EQUAL 1)
   target_compile_definitions(omniHandPro25Can PRIVATE ZLG_USBCANFD_SDK)

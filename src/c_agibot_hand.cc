@@ -27,18 +27,222 @@
 #define CANID_PRODUCT_ID 0x01
 
 #define DEGREE_OF_FREEDOM 12
+#if !USE_CAN_BUS
+// 在这里开发 485
+AgibotHandO12::AgibotHandO12(unsigned char device_id, EHandType hand_type)
+    : device_id_(device_id) {
+}
 
+AgibotHandO12::~AgibotHandO12() {
+}
+
+void AgibotHandO12::SetJointMotorPosi(unsigned char joint_motor_index, int16_t posi) {
+  return;
+}
+
+int16_t AgibotHandO12::GetJointMotorPosi(unsigned char joint_motor_index) {
+  return 0;
+}
+
+void AgibotHandO12::SetAllJointMotorPosi(std::vector<int16_t> vec_posi) {
+  return;
+}
+
+std::vector<int16_t> AgibotHandO12::GetAllJointMotorPosi() {
+  return {};
+}
+  #if !DISABLE_FUNC
+void AgibotHandO12::SetJointAngle(unsigned char joint_motor_index, double angle) {
+  return;
+}
+
+double AgibotHandO12::GetJointAngle(unsigned char joint_motor_index) {
+  return 0.0;
+}
+  #endif
+
+void AgibotHandO12::SetAllJointAngles(std::vector<double> vec_angle) {
+  return;
+}
+
+std::vector<double> AgibotHandO12::GetAllJointAngles() {
+  return {};
+}
+
+  #if !DISABLE_FUNC
+void AgibotHandO12::SetJointMotorTorque(unsigned char joint_motor_index, int16_t torque) {
+  return;
+}
+
+int16_t AgibotHandO12::GetJointMotorTorque(unsigned char joint_motor_index) {
+  return 0;
+}
+
+void AgibotHandO12::SetAllJointMotorTorque(std::vector<int16_t> vec_torque) {
+  return;
+}
+
+std::vector<int16_t> AgibotHandO12::GetAllJointMotorTorque() {
+  return {};
+}
+  #endif
+
+void AgibotHandO12::SetJointMotorVelo(unsigned char joint_motor_index, int16_t velo) {
+  return;
+}
+
+int16_t AgibotHandO12::GetJointMotorVelo(unsigned char joint_motor_index) {
+  return 0;
+}
+
+void AgibotHandO12::SetAllJointMotorVelo(std::vector<int16_t> vec_velo) {
+  return;
+}
+
+std::vector<int16_t> AgibotHandO12::GetAllJointMotorVelo() {
+  return {};
+}
+
+TouchSensorData AgibotHandO12::GetTouchSensorData(EFinger eFinger) {
+  return {};
+}
+
+void AgibotHandO12::SetControlMode(unsigned char joint_motor_index, EControlMode mode) {
+  return;
+}
+
+EControlMode AgibotHandO12::GetControlMode(unsigned char joint_motor_index) {
+  return EControlMode::eUnknown;
+}
+
+void AgibotHandO12::SetAllControlMode(std::vector<unsigned char> vec_ctrl_mode) {
+  return;
+}
+
+std::vector<unsigned char> AgibotHandO12::GetAllControlMode() {
+  return {};
+}
+
+void AgibotHandO12::SetCurrentThreshold(unsigned char joint_motor_index, int16_t current_threshold) {
+  return;
+}
+
+int16_t AgibotHandO12::GetCurrentThreshold(unsigned char joint_motor_index) {
+  return {};
+}
+
+void AgibotHandO12::SetAllCurrentThreshold(std::vector<int16_t> vec_current_threshold) {
+  return;
+}
+
+std::vector<int16_t> AgibotHandO12::GetAllCurrentThreshold() {
+  return {};
+}
+
+void AgibotHandO12::MixCtrlJointMotor(std::vector<MixCtrl> vec_mix_ctrl) {
+  return;
+}
+
+JointMotorErrorReport AgibotHandO12::GetErrorReport(unsigned char joint_motor_index) {
+  return {};
+}
+
+std::vector<JointMotorErrorReport> AgibotHandO12::GetAllErrorReport() {
+  return {};
+}
+
+void AgibotHandO12::SetErrorReportPeriod(unsigned char joint_motor_index, uint16_t period) {
+  return;
+}
+
+void AgibotHandO12::SetAllErrorReportPeriod(std::vector<uint16_t> vec_period) {
+  return;
+}
+
+uint16_t AgibotHandO12::GetTemperatureReport(unsigned char joint_motor_index) {
+  return 0;
+}
+
+std::vector<uint16_t> AgibotHandO12::GetAllTemperatureReport() {
+  return {};
+}
+
+void AgibotHandO12::SetTemperReportPeriod(unsigned char joint_motor_index, uint16_t period) {
+  return;
+}
+
+void AgibotHandO12::SetAllTemperReportPeriod(std::vector<uint16_t> vec_period) {
+  return;
+}
+
+int16_t AgibotHandO12::GetCurrentReport(unsigned char joint_motor_index) {
+  return {};
+}
+
+std::vector<uint16_t> AgibotHandO12::GetAllCurrentReport() {
+  return {};
+}
+
+void AgibotHandO12::SetCurrentReportPeriod(unsigned char joint_motor_index, uint16_t period) {
+  return;
+}
+
+void AgibotHandO12::SetAllCurrentReportPeriod(std::vector<uint16_t> vec_period) {
+  return;
+}
+
+void AgibotHandO12::ProcessMsg(CanfdFrame frame) {
+  return;
+}
+
+VendorInfo AgibotHandO12::GetVendorInfo() {
+  return {};
+}
+
+DeviceInfo AgibotHandO12::GetDeviceInfo() {
+  return {};
+}
+
+void AgibotHandO12::SetDeviceId(unsigned char device_id) {
+  return;
+}
+
+void AgibotHandO12::UpdateFirmware(std::string file_name) {
+  return;
+}
+
+void AgibotHandO12::SendPackage() {
+  return;
+}
+
+void AgibotHandO12::GetUpgradeResult() {
+  return;
+}
+
+bool AgibotHandO12::JudgeMsgMatch(unsigned int req_id, unsigned int rep_id) {
+  return false;
+}
+
+unsigned int AgibotHandO12::GetMatchedRepId(unsigned int req_id) {
+  return 0;
+}
+
+void AgibotHandO12::ShowDataDetails(bool show) const {
+  return;
+}
+
+#else
 AgibotHandO12::AgibotHandO12(unsigned char device_id, EHandType hand_type)
     : device_id_(device_id) {
   is_left_hand_ = hand_type == EHandType::eLeft;
 
-#ifdef ZLG_USBCANFD_SDK
+  #ifdef ZLG_USBCANFD_SDK
   canfd_device_ = std::make_unique<ZlgUsbcanfdSDK>();
-#endif
+  #endif
 
-#ifdef SOCKET_CAN
+  #ifdef SOCKET_CAN
   canfd_device_ = std::make_unique<CanBusDeviceSocketCan>();
-#endif
+  #endif
   canfd_device_->SetCallback(std::bind(&AgibotHandO12::ProcessMsg, this, std::placeholders::_1));
   canfd_device_->SetCalcuMatchRepId(std::bind(&AgibotHandO12::GetMatchedRepId, this, std::placeholders::_1));
   canfd_device_->SetMsgMatchJudge(std::bind(&AgibotHandO12::JudgeMsgMatch, this, std::placeholders::_1, std::placeholders::_2));
@@ -146,7 +350,7 @@ std::vector<int16_t> AgibotHandO12::GetAllJointMotorPosi() {
     return {};
   }
 }
-#if !DISABLE_FUNC
+  #if !DISABLE_FUNC
 void AgibotHandO12::SetJointAngle(unsigned char joint_motor_index, double angle) {
   if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
     // 获取当前所有关节角度
@@ -187,7 +391,7 @@ double AgibotHandO12::GetJointAngle(unsigned char joint_motor_index) {
     return 0.0;
   }
 }
-#endif
+  #endif
 
 void AgibotHandO12::SetAllJointAngles(std::vector<double> vec_angle) {
   if (vec_angle.size() != DEGREE_OF_FREEDOM) {
@@ -216,7 +420,7 @@ std::vector<double> AgibotHandO12::GetAllJointAngles() {
   return kinematics_solver_ptr_->ConvertActuator2Joint(motor_positions);
 }
 
-#if !DISABLE_FUNC
+  #if !DISABLE_FUNC
 void AgibotHandO12::SetJointMotorTorque(unsigned char joint_motor_index, int16_t torque) {
   if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
     UnCanId unCanId{};
@@ -314,7 +518,7 @@ std::vector<int16_t> AgibotHandO12::GetAllJointMotorTorque() {
     return {};
   }
 }
-#endif
+  #endif
 
 void AgibotHandO12::SetJointMotorVelo(unsigned char joint_motor_index, int16_t velo) {
   if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
@@ -1239,3 +1443,5 @@ unsigned int AgibotHandO12::GetMatchedRepId(unsigned int req_id) {
 void AgibotHandO12::ShowDataDetails(bool show) const {
   canfd_device_->ShowDataDetails(show);
 }
+
+#endif
