@@ -29,8 +29,6 @@ function(get_serial)
     FetchContent_Populate(serial)
     file(READ ${serial_SOURCE_DIR}/CMakeLists.txt SERIAL_TMP_VAR)
 
-    message("==>${serial_SOURCE_DIR}/CMakeLists.txt")
-
     # 1. 注释掉原来的 find_package
     string(REPLACE "find_package(catkin REQUIRED)" "# find_package(catkin REQUIRED)" SERIAL_TMP_VAR "${SERIAL_TMP_VAR}")
 

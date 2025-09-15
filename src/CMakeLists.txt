@@ -26,7 +26,7 @@ add_library(omniHandPro25Can SHARED ${MODULE_SOURCES})
 
 set_target_properties(omniHandPro25Can PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
 
-target_include_directories(omniHandPro25Can PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../_deps/serial-src/include)
+target_include_directories(omniHandPro25Can PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../_deps/serial-src/include)
 target_link_libraries(omniHandPro25Can PRIVATE serial)
 
 if(CanfdDevice EQUAL 1)

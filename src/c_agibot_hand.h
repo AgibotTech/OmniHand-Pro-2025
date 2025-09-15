@@ -16,6 +16,7 @@
 #include "can_bus_device/c_can_bus_device.h"
 #include "kinematics_solver/kinematics_solver.h"
 #include "proto.h"
+#include "rs_485_device/rs_485_device.h"
 
 #include "export_symbols.h"
 
