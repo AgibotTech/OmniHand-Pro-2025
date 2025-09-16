@@ -1,3 +1,6 @@
+// Copyright (c) 2025, Agibot Co., Ltd.
+// OmniHand Pro 2025 SDK is licensed under Mulan PSL v2.
+
 /**
  * @file o12hand_ctrl.h
  * @author AgiBot-lishuang

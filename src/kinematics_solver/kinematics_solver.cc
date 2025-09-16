@@ -1,3 +1,6 @@
+// Copyright (c) 2025, Agibot Co., Ltd.
+// OmniHand Pro 2025 SDK is licensed under Mulan PSL v2.
+
 #include "kinematics_solver/kinematics_solver.h"
 
 namespace omnihandProSDK {
