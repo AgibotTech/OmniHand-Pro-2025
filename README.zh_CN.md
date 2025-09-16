@@ -54,14 +54,14 @@ pip install agibot_hand_py-0.8.0-cp310-cp310-linux_x86_64.whl
 
 OmniHand Pro 2025 共 12 个自由度，索引从 1 到 12， 各索引对应的控制电机如下图所示：
 
-![](document/pic/hand_joints.jpg)
+![](document/pic/hand_motors.jpg)
 
 ## 运行示例
 
 ```bash
 cd python/example
 
-python3 ./demo_gestures_ok.py
+python3 ./demo_set_postion.py
 ```
 
 ## 目录结构
