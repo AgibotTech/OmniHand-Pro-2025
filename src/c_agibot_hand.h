@@ -83,28 +83,34 @@ class AGIBOT_EXPORT AgibotHandO12 {
   std::vector<int16_t> GetAllJointMotorPosi();
 #if !DISABLE_FUNC
   /**
-   * @brief 设置单个关节的关节角
+   * @brief 设置单个主动关节的关节角
    * @param joint_motor_index 关节电机索引
    * @param angle 关节角度(单位：弧度)
    */
-  void SetJointAngle(unsigned char joint_motor_index, double angle);
+  void SetActiveJointAngle(unsigned char joint_motor_index, double angle);
 
   /**
-   * @brief 获取单个关节的关节角
+   * @brief 获取单个主动关节的关节角
    * @param joint_motor_index
    * @return
    */
-  double GetJointAngle(unsigned char joint_motor_index);
+  double GetActiveJointAngle(unsigned char joint_motor_index);
 #endif
   /**
-   * @brief 批量设置所有关节的关节角
+   * @brief 批量设置所有主动关节的关节角
    * @note 注意要提供完整的12个关节电机的关节角数据
    * @param vec_angle
    */
-  void SetAllJointAngles(std::vector<double> vec_angle);
+  void SetAllActiveJointAngles(std::vector<double> vec_angle);
 
   /**
-   * @brief 批量获取所有关节的关节角
+   * @brief 批量获取所有主动关节的关节角
+   * @return
+   */
+  std::vector<double> GetAllActiveJointAngles();
+
+  /**
+   * @brief 批量获取所有主动+被动关节的关节角
    * @return
    */
   std::vector<double> GetAllJointAngles();

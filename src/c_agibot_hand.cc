@@ -147,10 +147,10 @@ std::vector<int16_t> AgibotHandO12::GetAllJointMotorPosi() {
   }
 }
 #if !DISABLE_FUNC
-void AgibotHandO12::SetJointAngle(unsigned char joint_motor_index, double angle) {
+void AgibotHandO12::SetActiveJointAngle(unsigned char joint_motor_index, double angle) {
   if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
     // 获取当前所有关节角度
-    std::vector<double> current_angles = GetAllJointAngles();
+    std::vector<double> current_angles = GetAllActiveJointAngles();
     for (auto a : current_angles) {
       std::cout << " | " << a << std::endl;
     }
@@ -167,7 +167,7 @@ void AgibotHandO12::SetJointAngle(unsigned char joint_motor_index, double angle)
   }
 }
 
-double AgibotHandO12::GetJointAngle(unsigned char joint_motor_index) {
+double AgibotHandO12::GetActiveJointAngle(unsigned char joint_motor_index) {
   if (joint_motor_index > 0 && joint_motor_index <= DEGREE_OF_FREEDOM) {
     // 获取当前电机位置
     int16_t motor_posi = GetJointMotorPosi(joint_motor_index);
@@ -189,7 +189,7 @@ double AgibotHandO12::GetJointAngle(unsigned char joint_motor_index) {
 }
 #endif
 
-void AgibotHandO12::SetAllJointAngles(std::vector<double> vec_angle) {
+void AgibotHandO12::SetAllActiveJointAngles(std::vector<double> vec_angle) {
   if (vec_angle.size() != DEGREE_OF_FREEDOM) {
     std::cerr << "[Error]: 无效参数，需与主动自由度数量 " << std::dec << DEGREE_OF_FREEDOM << " 相匹配." << std::endl;
     return;
@@ -205,7 +205,7 @@ void AgibotHandO12::SetAllJointAngles(std::vector<double> vec_angle) {
   SetAllJointMotorPosi(motor_posi_short);
 }
 
-std::vector<double> AgibotHandO12::GetAllJointAngles() {
+std::vector<double> AgibotHandO12::GetAllActiveJointAngles() {
   // 获取所有电机位置
   std::vector<int16_t> motor_posi = GetAllJointMotorPosi();
 
@@ -214,6 +214,12 @@ std::vector<double> AgibotHandO12::GetAllJointAngles() {
 
   // 使用运动学求解器转换电机位置为关节角度
   return kinematics_solver_ptr_->ConvertActuator2Joint(motor_positions);
+}
+
+std::vector<double> AgibotHandO12::GetAllJointAngles() {
+  std::vector<double> active_joint_angles = GetAllActiveJointAngles();
+  return kinematics_solver_ptr_->GetAllJointPos(active_joint_angles);
+  ;
 }
 
 #if !DISABLE_FUNC

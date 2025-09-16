@@ -114,10 +114,11 @@ PYBIND11_MODULE(agibot_hand_core, m) {
       .def("set_all_joint_positions", &AgibotHandO12::SetAllJointMotorPosi)
       .def("get_all_joint_positions", &AgibotHandO12::GetAllJointMotorPosi)
 #if !DISABLE_FUNC
-      .def("set_joint_angle", &AgibotHandO12::SetJointAngle)
-      .def("get_joint_angle", &AgibotHandO12::GetJointAngle)
+      .def("set_active_joint_angle", &AgibotHandO12::SetActiveJointAngle)
+      .def("get_active_joint_angle", &AgibotHandO12::GetActiveJointAngle)
 #endif
-      .def("set_all_joint_angles", &AgibotHandO12::SetAllJointAngles)
+      .def("set_all_active_joint_angles", &AgibotHandO12::SetAllActiveJointAngles)
+      .def("get_all_active_joint_angles", &AgibotHandO12::GetAllActiveJointAngles)
       .def("get_all_joint_angles", &AgibotHandO12::GetAllJointAngles)
       .def("set_joint_velocity", &AgibotHandO12::SetJointMotorVelo)
       .def("get_joint_velocity", &AgibotHandO12::GetJointMotorVelo)
