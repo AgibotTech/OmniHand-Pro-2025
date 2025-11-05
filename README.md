@@ -20,7 +20,7 @@ OmniHand Pro 2025 is a 12-degree-of-freedom professional dexterous hand featurin
 
 - Operating System: Ubuntu 22.04 (x86_64)
 - Compiler: GCC 11.4 or higher
-- Build Tools: CMake 3.16 or higher
+- Build Tools: CMake 3.24 or higher
 - Python: 3.10 or higher
 
 ### Installation
