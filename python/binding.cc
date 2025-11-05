@@ -44,22 +44,22 @@ PYBIND11_MODULE(agibot_hand_core, m) {
       .def_readwrite("dof", &VendorInfo::dof)
       .def("__str__", &VendorInfo::toString);
 
-  //  Bind TouchSensorData structures
-  py::class_<TouchSensorData>(m, "TouchSensorData")
+  //  Bind TactileSensorData structures
+  py::class_<TactileSensorData>(m, "TactileSensorData")
       .def(py::init<>())
-      .def_readwrite("online_state", &TouchSensorData::online_state_)
+      .def_readwrite("online_state", &TactileSensorData::online_state_)
       .def_property_readonly("channel_values",
-                             [](const TouchSensorData &self) {
+                             [](const TactileSensorData &self) {
                                return std::vector<unsigned short>(
                                    self.channel_value_,
                                    self.channel_value_ + 9);
                              })
-      .def_readwrite("normal_force", &TouchSensorData::normal_force_)
-      .def_readwrite("tangent_force", &TouchSensorData::tangent_force_)
+      .def_readwrite("normal_force", &TactileSensorData::normal_force_)
+      .def_readwrite("tangent_force", &TactileSensorData::tangent_force_)
       .def_readwrite("tangent_force_angle",
-                     &TouchSensorData::tangent_force_angle_)
+                     &TactileSensorData::tangent_force_angle_)
       .def_property_readonly(
-          "capacitive_approach", [](const TouchSensorData &self) {
+          "capacitive_approach", [](const TactileSensorData &self) {
             return std::vector<unsigned char>(self.capa_approach_,
                                               self.capa_approach_ + 4);
           });
@@ -130,8 +130,8 @@ PYBIND11_MODULE(agibot_hand_core, m) {
       .def("set_all_joint_torques", &AgibotHandO12::SetAllJointMotorTorque)
       .def("get_all_joint_torques", &AgibotHandO12::GetAllJointMotorTorque)
 #endif
-      .def("get_touch_sensor_data", [](AgibotHandO12 &self, int finger_index) {
-        return self.GetTouchSensorData(static_cast<EFinger>(finger_index));
+      .def("get_tactile_sensor_data", [](AgibotHandO12 &self, int finger_index) {
+        return self.GetTactileSensorData(static_cast<EFinger>(finger_index));
       })
       .def("set_control_mode", [](AgibotHandO12 &self, int joint_motor_index, int mode) {
         self.SetControlMode(joint_motor_index, static_cast<EControlMode>(mode));

@@ -10,7 +10,7 @@ import time
 def main():
     hand = AgibotHandO12()
 
-    touch_data = hand.get_touch_sensor_data(EFinger.THUMB)
+    touch_data = hand.get_tactile_sensor_data(EFinger.THUMB)
     print(f"Thumb touch sensor data:")
     print(f"  Online state: {touch_data.online_state}")
     print(f"  Normal force: {touch_data.normal_force}")

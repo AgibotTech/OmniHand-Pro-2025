@@ -173,7 +173,7 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @param eFinger
    * @return
    */
-  TouchSensorData GetTouchSensorData(EFinger eFinger);
+  TactileSensorData GetTactileSensorData(EFinger eFinger);
 
   /**
    * @brief 设置单个关节电机控制模式

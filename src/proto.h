@@ -54,7 +54,7 @@ enum class AGIBOT_EXPORT EFinger : unsigned char {
 /**
  * @brief 触觉传感器数据
  */
-struct AGIBOT_EXPORT TouchSensorData {
+struct AGIBOT_EXPORT TactileSensorData {
   unsigned char online_state_;          //: 1~传感器在线;0~传感器不在线
   unsigned short channel_value_[9];     // 各通道值
   unsigned short normal_force_;         // 法向力:(0-3000,0.1N)
@@ -93,7 +93,7 @@ enum class AGIBOT_EXPORT EMsgType : unsigned char {
   eVendorInfo = 0x01,
   eDeviceInfo = 0x02,
   eCurrentThreshold = 0x03,
-  eTouchSensor = 0x05,
+  eTactileSensor = 0x05,
   eCtrlMode = 0x10,
   eTorqueCtrl = 0x11,
   eVeloCtrl = 0x12,

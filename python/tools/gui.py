@@ -401,7 +401,7 @@ class OmniHandGUI:
                 
                 for name in self.forces.keys():
                     try:
-                        force = max(0, self.hand.get_touch_sensor_data(finger_map[name]).normal_force)
+                        force = max(0, self.hand.get_tactile_sensor_data(finger_map[name]).normal_force)
                     except:
                         force = 0
                     

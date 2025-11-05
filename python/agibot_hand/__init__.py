@@ -3,7 +3,7 @@
 
 from .agibot_hand_core import (
     AgibotHandO12,
-    TouchSensorData,
+    TactileSensorData,
     JointMotorErrorReport,
     MixCtrl,
     VendorInfo,   
@@ -39,7 +39,7 @@ __all__ = [
     'EFinger',
     'EHandType',
     'EControlMode',
-    'TouchSensorData',
+    'TactileSensorData',
     'JointMotorErrorReport',
     'MixCtrl',
     'VendorInfo',   

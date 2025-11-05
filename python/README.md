@@ -84,10 +84,10 @@ class ControlMode:
 
 ### 数据结构
 
-#### TouchSensorData (触觉传感器数据)
+#### TactileSensorData (触觉传感器数据)
 
 ```python
-class TouchSensorData:
+class TactileSensorData:
     online_state: int           # 传感器在线状态 (1:在线, 0:离线)
     channel_values: List[int]   # 各通道值 (9个通道)
     normal_force: int           # 法向力 (0-3000, 单位:0.1N)
@@ -261,14 +261,14 @@ def get_all_joint_torques() -> List[int]:
 #### 传感器数据
 
 ```python
-def get_touch_sensor_data(finger: Finger) -> TouchSensorData:
+def get_tactile_sensor_data(finger: Finger) -> TactileSensorData:
     """获取指定手指的触觉传感器数据
 
     Args:
         finger (Finger): 手指枚举值，可选值：THUMB, INDEX, MIDDLE, RING, LITTLE
 
     Returns:
-        TouchSensorData: 触觉传感器数据结构，包含：
+        TactileSensorData: 触觉传感器数据结构，包含：
             - online_state: 传感器在线状态 (1:在线, 0:离线)
             - channel_values: 各通道值 (9个通道)
             - normal_force: 法向力 (0-3000, 单位:0.1N)

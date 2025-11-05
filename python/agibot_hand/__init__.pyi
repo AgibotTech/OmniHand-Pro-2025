@@ -60,7 +60,7 @@ class DeviceInfo:
     
     def __str__(self) -> str: ...
 
-class TouchSensorData:
+class TactileSensorData:
     online_state: int
     normal_force: int
     tangent_force: int
@@ -124,7 +124,7 @@ class AgibotHandO12:
     # def get_all_joint_torques(self) -> List[int]: ...
     
     # Sensor data
-    def get_touch_sensor_data(self, eFinger: EFinger) -> TouchSensorData: ...
+    def get_tactile_sensor_data(self, eFinger: EFinger) -> TactileSensorData: ...
     
     # Control mode
     def set_control_mode(self, joint_motor_index: int, mode: int) -> None: ...
