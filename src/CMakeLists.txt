@@ -41,6 +41,8 @@ endif()
  
 install(TARGETS omniHandPro25Can DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 install(FILES c_agibot_hand.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+install(FILES export_symbols.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+install(FILES proto.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 install(FILES can_bus_device/c_can_bus_device.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/can_bus_device)
 install(FILES kinematics_solver/kinematics_solver.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/kinematics_solver)
 install(FILES ${PROJECT_SOURCE_DIR}/thirdParty/usbcanfd_libusb_x64_1.0.10_250328/libusbcanfd.so DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
