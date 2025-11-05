@@ -20,7 +20,7 @@ OmniHand Pro 2025 is a 12-degree-of-freedom professional dexterous hand featurin
 
 - Operating System: Ubuntu 22.04 (x86_64)
 - Compiler: GCC 11.4 or higher
-- Build Tools: CMake 3.16 or higher
+- Build Tools: CMake 3.24 or higher
 - Python: 3.10 or higher
 
 ### Installation
@@ -54,14 +54,14 @@ pip install agibot_hand_py-0.8.0-cp310-cp310-linux_x86_64.whl
 
 OmniHand Pro 2025 has 12 degrees of freedom, indexed from 1 to 12. The control motors corresponding to each index are shown in the figure below:
 
-![](document/pic/hand_joints.jpg)
+![](document/pic/hand_motors.jpg)
 
 ## Running Examples
 
 ```bash
 cd python/example
 
-python3 ./demo_gestures_ok.py
+python3 ./demo_set_postion.py
 ```
 
 ## Directory Structure

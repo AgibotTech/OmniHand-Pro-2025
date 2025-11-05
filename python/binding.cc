@@ -10,22 +10,56 @@ namespace py = pybind11;
 PYBIND11_MODULE(agibot_hand_core, m) {
   m.doc() = "AgibotHandO12 Python Interface";
 
-  //  Bind TouchSensorData structures
-  py::class_<TouchSensorData>(m, "TouchSensorData")
+  // Bind CommuParams structure
+  py::class_<CommuParams>(m, "CommuParams")
       .def(py::init<>())
-      .def_readwrite("online_state", &TouchSensorData::online_state_)
+      .def_readwrite("bitrate_", &CommuParams::bitrate_)
+      .def_readwrite("sample_point_", &CommuParams::sample_point_)
+      .def_readwrite("dbitrate_", &CommuParams::dbitrate_)
+      .def_readwrite("dsample_point_", &CommuParams::dsample_point_);
+
+  // Bind DeviceInfo structure
+  py::class_<DeviceInfo>(m, "DeviceInfo")
+      .def(py::init<>())
+      .def_readwrite("device_id", &DeviceInfo::deviceId)
+      .def_readwrite("commu_params", &DeviceInfo::commuParams)
+      .def("__str__", &DeviceInfo::toString);
+
+  //  Bind Version structure
+  py::class_<Version>(m, "Version")
+      .def(py::init<>())
+      .def_readwrite("major_", &Version::major_)
+      .def_readwrite("minor_", &Version::minor_)
+      .def_readwrite("patch_", &Version::patch_)
+      .def_readwrite("res_", &Version::res_);
+
+  //  Bind VendorInfo structure
+  py::class_<VendorInfo>(m, "VendorInfo")
+      .def(py::init<>())
+      .def_readwrite("product_model", &VendorInfo::productModel)
+      .def_readwrite("product_seq_num", &VendorInfo::productSeqNum)
+      .def_readwrite("hardware_version", &VendorInfo::hardwareVersion)
+      .def_readwrite("software_version", &VendorInfo::softwareVersion)
+      .def_readwrite("voltage", &VendorInfo::voltage)
+      .def_readwrite("dof", &VendorInfo::dof)
+      .def("__str__", &VendorInfo::toString);
+
+  //  Bind TactileSensorData structures
+  py::class_<TactileSensorData>(m, "TactileSensorData")
+      .def(py::init<>())
+      .def_readwrite("online_state", &TactileSensorData::online_state_)
       .def_property_readonly("channel_values",
-                             [](const TouchSensorData &self) {
+                             [](const TactileSensorData &self) {
                                return std::vector<unsigned short>(
                                    self.channel_value_,
                                    self.channel_value_ + 9);
                              })
-      .def_readwrite("normal_force", &TouchSensorData::normal_force_)
-      .def_readwrite("tangent_force", &TouchSensorData::tangent_force_)
+      .def_readwrite("normal_force", &TactileSensorData::normal_force_)
+      .def_readwrite("tangent_force", &TactileSensorData::tangent_force_)
       .def_readwrite("tangent_force_angle",
-                     &TouchSensorData::tangent_force_angle_)
+                     &TactileSensorData::tangent_force_angle_)
       .def_property_readonly(
-          "capacitive_approach", [](const TouchSensorData &self) {
+          "capacitive_approach", [](const TactileSensorData &self) {
             return std::vector<unsigned char>(self.capa_approach_,
                                               self.capa_approach_ + 4);
           });
@@ -68,24 +102,36 @@ PYBIND11_MODULE(agibot_hand_core, m) {
       .def_readwrite("tgt_velo", &MixCtrl::tgt_velo_)
       .def_readwrite("tgt_torque", &MixCtrl::tgt_torque_);
 
-  //  Bind main class
+  //  Bind main class with custom constructor
   py::class_<AgibotHandO12>(m, "AgibotHandO12")
-      .def(py::init<unsigned char>(), py::arg("device_id") = DEFAULT_DEVICE_ID)
+      .def(py::init([](unsigned char device_id, int hand_type) {
+             return new AgibotHandO12(device_id, static_cast<EHandType>(hand_type));
+           }),
+           py::arg("device_id") = DEFAULT_DEVICE_ID, py::arg("hand_type") = 0)
       .def("set_device_id", &AgibotHandO12::SetDeviceId)
       .def("set_joint_position", &AgibotHandO12::SetJointMotorPosi)
       .def("get_joint_position", &AgibotHandO12::GetJointMotorPosi)
       .def("set_all_joint_positions", &AgibotHandO12::SetAllJointMotorPosi)
       .def("get_all_joint_positions", &AgibotHandO12::GetAllJointMotorPosi)
+#if !DISABLE_FUNC
+      .def("set_active_joint_angle", &AgibotHandO12::SetActiveJointAngle)
+      .def("get_active_joint_angle", &AgibotHandO12::GetActiveJointAngle)
+#endif
+      .def("set_all_active_joint_angles", &AgibotHandO12::SetAllActiveJointAngles)
+      .def("get_all_active_joint_angles", &AgibotHandO12::GetAllActiveJointAngles)
+      .def("get_all_joint_angles", &AgibotHandO12::GetAllJointAngles)
       .def("set_joint_velocity", &AgibotHandO12::SetJointMotorVelo)
       .def("get_joint_velocity", &AgibotHandO12::GetJointMotorVelo)
       .def("set_all_joint_velocities", &AgibotHandO12::SetAllJointMotorVelo)
       .def("get_all_joint_velocities", &AgibotHandO12::GetAllJointMotorVelo)
+#if !DISABLE_FUNC
       .def("set_joint_torque", &AgibotHandO12::SetJointMotorTorque)
       .def("get_joint_torque", &AgibotHandO12::GetJointMotorTorque)
       .def("set_all_joint_torques", &AgibotHandO12::SetAllJointMotorTorque)
       .def("get_all_joint_torques", &AgibotHandO12::GetAllJointMotorTorque)
-      .def("get_touch_sensor_data", [](AgibotHandO12 &self, int finger_index) {
-        return self.GetTouchSensorData(static_cast<EFinger>(finger_index));
+#endif
+      .def("get_tactile_sensor_data", [](AgibotHandO12 &self, int finger_index) {
+        return self.GetTactileSensorData(static_cast<EFinger>(finger_index));
       })
       .def("set_control_mode", [](AgibotHandO12 &self, int joint_motor_index, int mode) {
         self.SetControlMode(joint_motor_index, static_cast<EControlMode>(mode));

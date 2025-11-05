@@ -35,7 +35,7 @@ enum class EMsgType : unsigned char {
     eVendorInfo = 0x01,           // 厂家信息
     eDeviceInfo = 0x02,           // 设备信息
     eCurrentThreshold = 0x03,     // 电流阈值
-    eTouchSensor = 0x05,          // 触觉传感器
+    eTactileSensor = 0x05,          // 触觉传感器
     eCtrlMode = 0x10,             // 控制模式
     eTorqueCtrl = 0x11,           // 力矩控制
     eVeloCtrl = 0x12,             // 速度控制
@@ -49,10 +49,10 @@ enum class EMsgType : unsigned char {
 
 ## 数据结构
 
-### TouchSensorData (触觉传感器数据)
+### TactileSensorData (触觉传感器数据)
 
 ```cpp
-struct TouchSensorData {
+struct TactileSensorData {
     unsigned char online_state_;          // 传感器在线状态 (1:在线, 0:离线)
     unsigned short channel_value_[9];     // 各通道值 (9个通道)
     unsigned short normal_force_;         // 法向力 (0-3000, 单位:0.1N)
@@ -130,9 +130,10 @@ struct CommuParams {
 ```cpp
 /**
  * @brief 构造函数
- * @param device_id 设备ID，默认为1
+ * @param device_id 设备ID, 默认设备填写1
+ * @param hand_type 手型枚举值
  */
-explicit AgibotHandO12(unsigned char device_id);
+explicit AgibotHandO12(unsigned char device_id, EHandType hand_type);
 ```
 
 ### 设备信息相关
@@ -256,7 +257,7 @@ std::vector<short> GetAllJointMotorTorque();
  * @param eFinger 手指枚举值
  * @return 触觉传感器数据结构
  */
-TouchSensorData GetTouchSensorData(EFinger eFinger);
+TactileSensorData GetTactileSensorData(EFinger eFinger);
 ```
 
 ### 控制模式

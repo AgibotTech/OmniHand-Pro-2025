@@ -3,9 +3,13 @@
 
 from .agibot_hand_core import (
     AgibotHandO12,
-    TouchSensorData,
+    TactileSensorData,
     JointMotorErrorReport,
-    MixCtrl
+    MixCtrl,
+    VendorInfo,   
+    Version,     
+    CommuParams,   
+    DeviceInfo     
 )
 from enum import IntEnum
 
@@ -25,11 +29,21 @@ class EControlMode(IntEnum):
     POSITION_VELOCITY_TORQUE = 5
     UNKNOWN = 10
 
+class EHandType(IntEnum):
+    LEFT = 0
+    RIGHT = 1
+    UNKNOWN = 10
+
 __all__ = [
     'AgibotHandO12',
     'EFinger',
+    'EHandType',
     'EControlMode',
-    'TouchSensorData',
+    'TactileSensorData',
     'JointMotorErrorReport',
-    'MixCtrl'
+    'MixCtrl',
+    'VendorInfo',   
+    'Version',       
+    'CommuParams',   
+    'DeviceInfo'     
 ]

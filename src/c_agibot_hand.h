@@ -14,11 +14,14 @@
 #include <queue>
 
 #include "can_bus_device/c_can_bus_device.h"
+#include "kinematics_solver/kinematics_solver.h"
 #include "proto.h"
 
 #include "export_symbols.h"
 
 #define DEFAULT_DEVICE_ID 0x01
+
+#define DISABLE_FUNC 1
 
 /**
  * @brief O12灵巧手类
@@ -28,22 +31,23 @@ class AGIBOT_EXPORT AgibotHandO12 {
   /**
    * @brief 构造函数
    * @param device_id 设备Id
+   * @param hand_type 手型(左手/右手)
    */
-  explicit AgibotHandO12(unsigned char device_id);
+  explicit AgibotHandO12(unsigned char device_id, EHandType hand_type);
 
   ~AgibotHandO12();
 
   /**
    * @brief 获取厂家信息
-   * @return 厂家信息长字符串
+   * @return 厂家信息数据结构体
    */
-  std::string GetVendorInfo();
+  VendorInfo GetVendorInfo();
 
   /**
    * @brief 获取设备信息
-   * @return 设备信息长字符串
+   * @return 设备信息结构体
    */
-  std::string GetDeviceInfo();
+  DeviceInfo GetDeviceInfo();
 
   /**
    * @brief 设置设备Id
@@ -56,86 +60,120 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @param joint_motor_index 关节电机索引
    * @param posi 电机位置:(0~2000)
    */
-  void SetJointMotorPosi(unsigned char joint_motor_index, short posi);
+  void SetJointMotorPosi(unsigned char joint_motor_index, int16_t posi);
 
   /**
    * @brief 获取单个关节电机位置
    * @param joint_motor_index
    * @return
    */
-  short GetJointMotorPosi(unsigned char joint_motor_index);
+  int16_t GetJointMotorPosi(unsigned char joint_motor_index);
 
   /**
    * @brief 批量设置所有关节电机位置
    * @note 注意要提供完整的12个关节电机的位置数据
    * @param vec_posi
    */
-  void SetAllJointMotorPosi(std::vector<short> vec_posi);
+  void SetAllJointMotorPosi(std::vector<int16_t> vec_posi);
 
   /**
    * @brief 批量获取所有关节电机位置
    * @return
    */
-  std::vector<short> GetAllJointMotorPosi();
+  std::vector<int16_t> GetAllJointMotorPosi();
+#if !DISABLE_FUNC
+  /**
+   * @brief 设置单个主动关节的关节角
+   * @param joint_motor_index 关节电机索引
+   * @param angle 关节角度(单位：弧度)
+   */
+  void SetActiveJointAngle(unsigned char joint_motor_index, double angle);
 
+  /**
+   * @brief 获取单个主动关节的关节角
+   * @param joint_motor_index
+   * @return
+   */
+  double GetActiveJointAngle(unsigned char joint_motor_index);
+#endif
+  /**
+   * @brief 批量设置所有主动关节的关节角
+   * @note 注意要提供完整的12个关节电机的关节角数据
+   * @param vec_angle
+   */
+  void SetAllActiveJointAngles(std::vector<double> vec_angle);
+
+  /**
+   * @brief 批量获取所有主动关节的关节角
+   * @return
+   */
+  std::vector<double> GetAllActiveJointAngles();
+
+  /**
+   * @brief 批量获取所有主动+被动关节的关节角
+   * @return
+   */
+  std::vector<double> GetAllJointAngles();
+
+#if !DISABLE_FUNC
   /**
    * @brief 设置单个关节电机力矩
    * @param joint_motor_index
    * @param torque
    */
-  void SetJointMotorTorque(unsigned char joint_motor_index, short torque);
+  void SetJointMotorTorque(unsigned char joint_motor_index, int16_t torque);
 
   /**
    * @brief 获取单个关节电机力矩
    * @param joint_motor_index
    * @return
    */
-  short GetJointMotorTorque(unsigned char joint_motor_index);
+  int16_t GetJointMotorTorque(unsigned char joint_motor_index);
 
   /**
    * @brief 批量设置所有关节电机力矩
    * @param vec_torque
    */
-  void SetAllJointMotorTorque(std::vector<short> vec_torque);
+  void SetAllJointMotorTorque(std::vector<int16_t> vec_torque);
 
   /**
    * @brief 批量获取所有关节电机力矩
    * @return
    */
-  std::vector<short> GetAllJointMotorTorque();
-
+  std::vector<int16_t> GetAllJointMotorTorque();
+#endif
   /**
    * @brief 设置单个关节电机速度
    * @param joint_motor_index
    * @param velo
    */
-  void SetJointMotorVelo(unsigned char joint_motor_index, short velo);
+  void SetJointMotorVelo(unsigned char joint_motor_index, int16_t velo);
 
   /**
    * @brief 获取单个关节电机速度
    * @param joint_motor_index
    * @return
    */
-  short GetJointMotorVelo(unsigned char joint_motor_index);
+  int16_t GetJointMotorVelo(unsigned char joint_motor_index);
 
   /**
    * @brief 批量设置所有关节电机速度
    * @param vec_velo
    */
-  void SetAllJointMotorVelo(std::vector<short> vec_velo);
+  void SetAllJointMotorVelo(std::vector<int16_t> vec_velo);
 
   /**
    * @brief
    * @return 批量获取所有关节电机速度
    */
-  std::vector<short> GetAllJointMotorVelo();
+  std::vector<int16_t> GetAllJointMotorVelo();
 
   /**
    * @brief 获取指定手指的触觉传感器数据
    * @param eFinger
    * @return
    */
-  TouchSensorData GetTouchSensorData(EFinger eFinger);
+  TactileSensorData GetTactileSensorData(EFinger eFinger);
 
   /**
    * @brief 设置单个关节电机控制模式
@@ -168,26 +206,26 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @param joint_motor_index
    * @param current_threshold
    */
-  void SetCurrentThreshold(unsigned char joint_motor_index, short current_threshold);
+  void SetCurrentThreshold(unsigned char joint_motor_index, int16_t current_threshold);
 
   /**
    * @brief 获取单个关节电机电流阈值
    * @param joint_motor_index
    * @return
    */
-  short GetCurrentThreshold(unsigned char joint_motor_index);
+  int16_t GetCurrentThreshold(unsigned char joint_motor_index);
 
   /**
    * @brief 批量设置所有关节电机电流阈值
    * @param vec_current_threshold
    */
-  void SetAllCurrentThreshold(std::vector<short> vec_current_threshold);
+  void SetAllCurrentThreshold(std::vector<int16_t> vec_current_threshold);
 
   /**
    * @brief 批量获取所有关节电机电流阈值
    * @return
    */
-  std::vector<short> GetAllCurrentThreshold();
+  std::vector<int16_t> GetAllCurrentThreshold();
 
   /**
    * @brief 混合控制
@@ -213,65 +251,65 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @param joint_motor_index
    * @param period
    */
-  void SetErrorReportPeriod(unsigned char joint_motor_index, unsigned short period);
+  void SetErrorReportPeriod(unsigned char joint_motor_index, uint16_t period);
 
   /**
    * @brief 批量设置所有关节电机错误上报周期
    * @param vec_period
    */
-  void SetAllErrorReportPeriod(std::vector<unsigned short> vec_period);
+  void SetAllErrorReportPeriod(std::vector<uint16_t> vec_period);
 
   /**
    * @brief 获取单个关节电机温度上报
    * @param joint_motor_index
    * @return
    */
-  unsigned short GetTemperatureReport(unsigned char joint_motor_index);
+  uint16_t GetTemperatureReport(unsigned char joint_motor_index);
 
   /**
    * @brief 批量获取所有关节电机温度上报
    * @return
    */
-  std::vector<unsigned short> GetAllTemperatureReport();
+  std::vector<uint16_t> GetAllTemperatureReport();
 
   /**
    * @brief 设置单个关节电机温度上报周期
    * @param joint_motor_index
    * @param period
    */
-  void SetTemperReportPeriod(unsigned char joint_motor_index, unsigned short period);
+  void SetTemperReportPeriod(unsigned char joint_motor_index, uint16_t period);
 
   /**
    * @brief 设置所有关节电机温度上报周期
    * @param vec_period
    */
-  void SetAllTemperReportPeriod(std::vector<unsigned short> vec_period);
+  void SetAllTemperReportPeriod(std::vector<uint16_t> vec_period);
 
   /**
    * @brief 获取单个关节电机电流上报
    * @param joint_motor_index
    * @return
    */
-  short GetCurrentReport(unsigned char joint_motor_index);
+  int16_t GetCurrentReport(unsigned char joint_motor_index);
 
   /**
    * @brief 批量获取所有关节电机电流上报
    * @return
    */
-  std::vector<unsigned short> GetAllCurrentReport();
+  std::vector<uint16_t> GetAllCurrentReport();
 
   /**
    * @brief 设置单个关节电机电流上报周期
    * @param joint_motor_index
    * @param period
    */
-  void SetCurrentReportPeriod(unsigned char joint_motor_index, unsigned short period);
+  void SetCurrentReportPeriod(unsigned char joint_motor_index, uint16_t period);
 
   /**
    * @brief 批量设置所有关节电机电流上报周期
    * @param vec_period
    */
-  void SetAllCurrentReportPeriod(std::vector<unsigned short> vec_period);
+  void SetAllCurrentReportPeriod(std::vector<uint16_t> vec_period);
 
   /**
    * @brief 显示发送接收数据细节
@@ -330,13 +368,13 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @brief 温度上报数据
    */
   std::mutex mutex_temper_report_;
-  std::vector<unsigned short> vec_temper_report_{};
+  std::vector<uint16_t> vec_temper_report_{};
 
   /**
    * @brief 电流上报数据
    */
   std::mutex mutex_current_report_;
-  std::vector<unsigned short> vec_current_report_{};
+  std::vector<uint16_t> vec_current_report_{};
 
   /**
    * @brief 升级固件分包
@@ -347,6 +385,16 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @brief 设备Id
    */
   unsigned char device_id_{};
+
+  /**
+   * @brief 是否为左手
+   */
+  bool is_left_hand_{true};
+
+  /**
+   * @brief O12运动学求解器
+   */
+  std::unique_ptr<omnihandProSDK::O12KinematicsSolver> kinematics_solver_ptr_;
 };
 
 #endif  // C_AGIBOT_HAND_H

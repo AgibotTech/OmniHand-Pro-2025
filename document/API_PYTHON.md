@@ -27,10 +27,10 @@ EControlMode.UNKNOWN                     # 未知模式
 
 ## 数据结构
 
-### TouchSensorData (触觉传感器数据)
+### TactileSensorData (触觉传感器数据)
 
 ```python
-class TouchSensorData:
+class TactileSensorData:
     online_state: int           # 传感器在线状态 (1:在线, 0:离线)
     channel_values: List[int]   # 各通道值 (9个通道)
     normal_force: int           # 法向力 (0-3000, 单位:0.1N)
@@ -142,7 +142,7 @@ class AgibotHandO12:
         pass
 
     # 传感器数据
-    def get_touch_sensor_data(self, finger: Finger) -> TouchSensorData:
+    def get_tactile_sensor_data(self, finger: Finger) -> TactileSensorData:
         """获取指定手指的触觉传感器数据"""
         pass
 
@@ -383,7 +383,7 @@ def get_all_joint_torques(self) -> List[int]:
 ### 传感器数据
 
 ```python
-def get_touch_sensor_data(self, finger: Finger) -> TouchSensorData:
+def get_tactile_sensor_data(self, finger: Finger) -> TactileSensorData:
     """获取指定手指的触觉传感器数据
 
     Args:
@@ -391,7 +391,7 @@ def get_touch_sensor_data(self, finger: Finger) -> TouchSensorData:
                Finger.MIDDLE, Finger.RING, Finger.LITTLE
 
     Returns:
-        TouchSensorData: 触觉传感器数据结构
+        TactileSensorData: 触觉传感器数据结构
     """
 ```
 
@@ -519,7 +519,7 @@ def set_all_error_report_periods(self, periods: List[int]) -> None:
 ```python
 def get_temperature_report(self, joint_motor_index: int) -> int:
     """获取单个关节电机温度报告
-    
+
     Note:
         查询前需要先设置上报周期
 
@@ -532,7 +532,7 @@ def get_temperature_report(self, joint_motor_index: int) -> int:
 
 def get_all_temperature_reports(self) -> List[int]:
     """获取所有关节电机温度报告
-    
+
     Note:
         查询前需要先设置上报周期
 
@@ -561,7 +561,7 @@ def set_all_temperature_report_periods(self, periods: List[int]) -> None:
 ```python
 def get_current_report(self, joint_motor_index: int) -> int:
     """获取单个关节电机电流报告
-    
+
     Note:
         查询前需要先设置上报周期
 
@@ -574,10 +574,10 @@ def get_current_report(self, joint_motor_index: int) -> int:
 
 def get_all_current_reports(self) -> List[int]:
     """获取所有关节电机电流报告
-    
+
     Note:
         查询前需要先设置上报周期
-        
+
     Returns:
         List[int]: 电流值列表，长度为12
     """
