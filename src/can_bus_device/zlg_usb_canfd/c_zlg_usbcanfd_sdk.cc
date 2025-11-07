@@ -29,12 +29,7 @@ typedef unsigned int U32;
 #define RX_WAIT_TIME 100
 #define RX_BUFF_SIZE 1000
 
-ZlgUsbcanfdSDK::ZlgUsbcanfdSDK() {
-  if (ZlgUsbcanfdSDK::OpenDevice() == -1) {
-    return;
-  }
-
-  pthread_ = new std::thread(&ZlgUsbcanfdSDK::RecvFrame, this);
+ZlgUsbcanfdSDK::ZlgUsbcanfdSDK(uint8_t device_id) : device_id_(device_id) {
 }
 
 ZlgUsbcanfdSDK::~ZlgUsbcanfdSDK() {
@@ -48,9 +43,18 @@ ZlgUsbcanfdSDK::~ZlgUsbcanfdSDK() {
   ZlgUsbcanfdSDK::CloseDevice();
 }
 
+bool ZlgUsbcanfdSDK::Init() {
+  if (ZlgUsbcanfdSDK::OpenDevice() == -1) {
+    return false;
+  }
+
+  pthread_ = new std::thread(&ZlgUsbcanfdSDK::RecvFrame, this);
+  return true;
+}
+
 int ZlgUsbcanfdSDK::OpenDevice() {
   /*打开设备*/
-  if (VCI_OpenDevice(DEVICE_TYPE_USBCANFD, DEVICE_INDEX, 0)) {
+  if (VCI_OpenDevice(DEVICE_TYPE_USBCANFD, device_id_, 0)) {
     std::cout << "[INFO]: Open device usbcanfd successfully." << std::endl;
   } else {
     std::cout << "[ERROR]: Open device usbcanfd failed!" << std::endl;

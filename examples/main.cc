@@ -8,7 +8,7 @@
 
 void positionControlDemo() {
   try {
-    AgibotHandO12 hand(1, EHandType::eLeft);
+    AgibotHandO12 hand(0, EHandType::eLeft);
 
     // 设置单个关节位置
     hand.SetJointMotorPosi(8, 1000);

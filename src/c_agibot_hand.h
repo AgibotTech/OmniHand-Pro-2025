@@ -37,6 +37,10 @@ class AGIBOT_EXPORT AgibotHandO12 {
 
   ~AgibotHandO12();
 
+  bool Init() const {
+    return init_success_;
+  }
+
   /**
    * @brief 获取厂家信息
    * @return 厂家信息数据结构体
@@ -395,6 +399,8 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @brief O12运动学求解器
    */
   std::unique_ptr<omnihandProSDK::O12KinematicsSolver> kinematics_solver_ptr_;
+
+  bool init_success_{false};
 };
 
 #endif  // C_AGIBOT_HAND_H

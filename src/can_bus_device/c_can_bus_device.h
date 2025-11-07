@@ -109,6 +109,10 @@ class CanBusDeviceBase {
     calcu_match_rep_id_ = calcu_match_rep_id;
   }
 
+  virtual bool Init() {
+    return true;
+  }
+
   /**
    * @brief 接收帧
    */

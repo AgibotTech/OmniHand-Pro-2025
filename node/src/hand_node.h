@@ -2,7 +2,7 @@
  * @Author: huangshiheng@agibot.com
  * @Date: 2025-11-06 17:29:45
  * @LastEditors: error: git config user.name & please set dead value or install git
- * @LastEditTime: 2025-11-06 20:04:37
+ * @LastEditTime: 2025-11-07 10:44:42
  * @FilePath: /OmniHand-Pro-2025/node/src/hand_node.h
  * @Description: 
  * 
@@ -32,7 +32,7 @@ namespace omnihand_pro {
 
 class OmniHandProNode : public rclcpp::Node {
  public:
-  OmniHandProNode();
+  OmniHandProNode(uint8_t device_id);
   ~OmniHandProNode();
 
  private:
@@ -74,7 +74,6 @@ class OmniHandProNode : public rclcpp::Node {
   void tactile_sensor_callback(const omnihand_pro_node_msgs::msg::TactileSensor::SharedPtr msg);
   void temperature_period_callback(const omnihand_pro_node_msgs::msg::TemperaturePeriod::SharedPtr msg);
   void temperature_report_callback(const omnihand_pro_node_msgs::msg::TemperatureReport::SharedPtr msg);
-
 
   // Publisher functions
   void publish_control_mode();

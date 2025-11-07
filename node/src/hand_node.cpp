@@ -10,10 +10,19 @@
 
 namespace omnihand_pro {
 
-OmniHandProNode::OmniHandProNode() : Node("omnihand_pro_node") {
-  agibot_hand_ = std::make_shared<AgibotHandO12>(1, EHandType::eLeft);
+OmniHandProNode::OmniHandProNode(uint8_t device_id) : Node("omnihand_pro_node") {
+  if (device_id == 0) {
+    agibot_hand_ = std::make_shared<AgibotHandO12>(device_id, EHandType::eLeft);
+  } else {
+    agibot_hand_ = std::make_shared<AgibotHandO12>(device_id, EHandType::eRight);
+  }
 
-  bool is_left = true;
+  if (!agibot_hand_->Init()) {
+    RCLCPP_ERROR(this->get_logger(), "Failed to initialize AgibotHandO12 device with ID %d", device_id);
+    return;
+  }
+
+  bool is_left = (device_id == 0);
   std::string topic_prefix = "";
   if (is_left) {
     topic_prefix = "/agihand/omnihand/left/";
@@ -67,7 +76,7 @@ OmniHandProNode::OmniHandProNode() : Node("omnihand_pro_node") {
     std::chrono::milliseconds(10), // 100Hz = 10ms
     std::bind(&OmniHandProNode::timer_100hz_callback, this));
 
-  RCLCPP_INFO(this->get_logger(), "OmniHand Pro Node initialized");
+  RCLCPP_INFO(this->get_logger(), "OmniHand Pro Node initialized device with ID %d", device_id);
 }
 
 OmniHandProNode::~OmniHandProNode() {
