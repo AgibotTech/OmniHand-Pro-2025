@@ -1,2 +1,2 @@
 std_msgs/Header header
-uint16[] temperature_period
+uint16[] temperature_periods

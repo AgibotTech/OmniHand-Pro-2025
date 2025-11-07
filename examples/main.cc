@@ -10,7 +10,6 @@ void positionControlDemo() {
   try {
     AgibotHandO12 hand(0, EHandType::eLeft);
 
-    // 设置单个关节位置
     hand.SetJointMotorPosi(8, 1000);
     std::cout << "设置关节10位置为1000" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));

@@ -8,4 +8,4 @@ std_msgs/Header header
 # ePosiVeloTorque = 5,          // 位置-速度-力矩混合控制
 # eUnknown = 10                 // 未知模式
 
-int8[] mode
+int8[] modes

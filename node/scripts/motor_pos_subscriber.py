@@ -43,7 +43,6 @@ class MotorPosSubscriber(Node):
             f'timestamp: {msg.header.stamp.sec}.{msg.header.stamp.nanosec}'
         )
 
-
 def main(args=None):
     rclpy.init(args=args)
     

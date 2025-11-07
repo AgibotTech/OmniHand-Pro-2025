@@ -1,2 +1,2 @@
 std_msgs/Header header
-int16[] current_threshold
+int16[] current_thresholds

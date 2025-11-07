@@ -2,7 +2,7 @@
  * @Author: huangshiheng@agibot.com
  * @Date: 2025-11-06 17:29:45
  * @LastEditors: error: git config user.name & please set dead value or install git
- * @LastEditTime: 2025-11-07 10:44:42
+ * @LastEditTime: 2025-11-07 13:40:24
  * @FilePath: /OmniHand-Pro-2025/node/src/hand_node.h
  * @Description: 
  * 
@@ -38,7 +38,7 @@ class OmniHandProNode : public rclcpp::Node {
  private:
   // Publishers
   rclcpp::Publisher<omnihand_pro_node_msgs::msg::ControlMode>::SharedPtr control_mode_publisher_;             // 1HZ
-  rclcpp::Publisher<omnihand_pro_node_msgs::msg::CurrentPeriod>::SharedPtr current_period_publisher_;         // 1HZ
+
   rclcpp::Publisher<omnihand_pro_node_msgs::msg::CurrentReport>::SharedPtr current_report_publisher_;         // 1HZ
   rclcpp::Publisher<omnihand_pro_node_msgs::msg::CurrentThreshold>::SharedPtr current_threshold_publisher_;   // 1HZ
   rclcpp::Publisher<omnihand_pro_node_msgs::msg::ErrorPeriod>::SharedPtr error_period_publisher_;             // 1HZ
@@ -52,15 +52,15 @@ class OmniHandProNode : public rclcpp::Node {
   // Subscribers
   rclcpp::Subscription<omnihand_pro_node_msgs::msg::ControlMode>::SharedPtr control_mode_subscriber_;
   rclcpp::Subscription<omnihand_pro_node_msgs::msg::CurrentPeriod>::SharedPtr current_period_subscriber_;
-  rclcpp::Subscription<omnihand_pro_node_msgs::msg::CurrentReport>::SharedPtr current_report_subscriber_;
+
   rclcpp::Subscription<omnihand_pro_node_msgs::msg::CurrentThreshold>::SharedPtr current_threshold_subscriber_;
   rclcpp::Subscription<omnihand_pro_node_msgs::msg::ErrorPeriod>::SharedPtr error_period_subscriber_;
   rclcpp::Subscription<omnihand_pro_node_msgs::msg::MotorErrorReport>::SharedPtr motor_error_report_subscriber_;
   rclcpp::Subscription<omnihand_pro_node_msgs::msg::MotorPos>::SharedPtr motor_pos_subscriber_;
   rclcpp::Subscription<omnihand_pro_node_msgs::msg::MotorVel>::SharedPtr motor_vel_subscriber_;
-  rclcpp::Subscription<omnihand_pro_node_msgs::msg::TactileSensor>::SharedPtr tactile_sensor_subscriber_;
+
   rclcpp::Subscription<omnihand_pro_node_msgs::msg::TemperaturePeriod>::SharedPtr temperature_period_subscriber_;
-  rclcpp::Subscription<omnihand_pro_node_msgs::msg::TemperatureReport>::SharedPtr temperature_report_subscriber_;
+
 
   // Callback functions
   void control_mode_callback(const omnihand_pro_node_msgs::msg::ControlMode::SharedPtr msg);
@@ -68,16 +68,15 @@ class OmniHandProNode : public rclcpp::Node {
   void current_report_callback(const omnihand_pro_node_msgs::msg::CurrentReport::SharedPtr msg);
   void current_threshold_callback(const omnihand_pro_node_msgs::msg::CurrentThreshold::SharedPtr msg);
   void error_period_callback(const omnihand_pro_node_msgs::msg::ErrorPeriod::SharedPtr msg);
-  void motor_error_report_callback(const omnihand_pro_node_msgs::msg::MotorErrorReport::SharedPtr msg);
+
   void motor_pos_callback(const omnihand_pro_node_msgs::msg::MotorPos::SharedPtr msg);
   void motor_vel_callback(const omnihand_pro_node_msgs::msg::MotorVel::SharedPtr msg);
-  void tactile_sensor_callback(const omnihand_pro_node_msgs::msg::TactileSensor::SharedPtr msg);
+
   void temperature_period_callback(const omnihand_pro_node_msgs::msg::TemperaturePeriod::SharedPtr msg);
-  void temperature_report_callback(const omnihand_pro_node_msgs::msg::TemperatureReport::SharedPtr msg);
+
 
   // Publisher functions
   void publish_control_mode();
-  void publish_current_period();
   void publish_current_report();
   void publish_current_threshold();
   void publish_error_period();

@@ -8,4 +8,4 @@ std_msgs/Header header
 # unsigned char res1_ : 3;         // 保留位
 # unsigned char res2_;             // 保留字节
 
-uint16[] data
+uint16[] error_reports

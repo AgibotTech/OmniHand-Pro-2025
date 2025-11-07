@@ -46,19 +46,26 @@ class LeftMotorPosPublisher(Node):
         msg.header.frame_id = "left_hand_frame"
         
         # 生成示例位置命令数据 (可以根据实际需求修改)
-        # 这里使用正弦波模拟动态位置命令
+        # 这里使用正弦波模拟动态位置命令，位置范围0-2000
         import math
         self.position_counter += 1
-        
-        # 5个电机的位置命令
+
+        # 12个电机的位置命令，范围0-2000
         msg.pos = [
-            int(1000 + 500 * math.sin(self.position_counter * 0.1)),
-            int(1500 + 300 * math.cos(self.position_counter * 0.1)),
-            int(2000 + 400 * math.sin(self.position_counter * 0.15)),
-            int(2500 + 600 * math.cos(self.position_counter * 0.12)),
-            int(3000 + 200 * math.sin(self.position_counter * 0.08))
+            int(500 + 400 * math.sin(self.position_counter * 0.1)),
+            int(800 + 300 * math.cos(self.position_counter * 0.1)),
+            int(1000 + 400 * math.sin(self.position_counter * 0.15)),
+            int(1200 + 300 * math.cos(self.position_counter * 0.12)),
+            int(1500 + 200 * math.sin(self.position_counter * 0.08)),
+            int(700 + 350 * math.cos(self.position_counter * 0.09)),
+            int(900 + 250 * math.sin(self.position_counter * 0.13)),
+            int(1100 + 250 * math.cos(self.position_counter * 0.11)),
+            int(1300 + 300 * math.sin(self.position_counter * 0.14)),
+            int(600 + 400 * math.cos(self.position_counter * 0.16)),
+            int(1400 + 300 * math.sin(self.position_counter * 0.07)),
+            int(1600 + 300 * math.cos(self.position_counter * 0.18))
         ]
-        
+
         self.left_motor_pos_cmd_publisher.publish(msg)
         
         self.get_logger().debug(

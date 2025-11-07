@@ -1,2 +1,2 @@
 std_msgs/Header header
-TactileSensorData[] tactile_data
+TactileSensorData[] tactile_datas
