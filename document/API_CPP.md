@@ -131,11 +131,12 @@ struct CommuParams {
 /**
  * @brief 构造函数
  * @param device_id 设备ID, 默认设备填写1
+ * @param canfd_id  can设备ID, 默认设备填写0
  * @param hand_type 手型枚举值
  */
-explicit AgibotHandO12(unsigned char device_id, EHandType hand_type);
+explicit AgibotHandO12(unsigned char device_id, unsigned char canfd_id, unsigned char canfd_id);
 ```
-
+s
 ### 设备信息相关
 
 ```cpp

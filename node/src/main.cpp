@@ -2,7 +2,7 @@
  * @Author: huangshiheng@agibot.com
  * @Date: 2025-11-06 14:15:12
  * @LastEditors: error: git config user.name & please set dead value or install git
- * @LastEditTime: 2025-11-07 13:57:39
+ * @LastEditTime: 2025-11-07 16:21:47
  * @FilePath: /OmniHand-Pro-2025/node/src/main.cpp
  * @Description: 
  * 
@@ -16,8 +16,8 @@ int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
 
   // 创建多个节点
-  auto left_hand_node = std::make_shared<omnihand_pro::OmniHandProNode>(0);
-  auto right_hand_node = std::make_shared<omnihand_pro::OmniHandProNode>(1);
+  auto left_hand_node = std::make_shared<omnihand_pro::OmniHandProNode>(1, 0, EHandType::eLeft);
+  auto right_hand_node = std::make_shared<omnihand_pro::OmniHandProNode>(2, 1, EHandType::eRight);
 
   // 创建多线程执行器
   rclcpp::executors::MultiThreadedExecutor executor;

@@ -28,12 +28,12 @@
 
 #define DEGREE_OF_FREEDOM 12
 
-AgibotHandO12::AgibotHandO12(unsigned char device_id, EHandType hand_type)
+AgibotHandO12::AgibotHandO12(unsigned char device_id, unsigned char canfd_id, EHandType hand_type)
     : device_id_(device_id) {
   is_left_hand_ = hand_type == EHandType::eLeft;
 
 #ifdef ZLG_USBCANFD_SDK
-  canfd_device_ = std::make_unique<ZlgUsbcanfdSDK>(device_id_);
+  canfd_device_ = std::make_unique<ZlgUsbcanfdSDK>(canfd_id);
 #endif
 
 #ifdef SOCKET_CAN

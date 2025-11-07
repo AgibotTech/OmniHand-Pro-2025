@@ -104,10 +104,10 @@ PYBIND11_MODULE(agibot_hand_core, m) {
 
   //  Bind main class with custom constructor
   py::class_<AgibotHandO12>(m, "AgibotHandO12")
-      .def(py::init([](unsigned char device_id, int hand_type) {
-             return new AgibotHandO12(device_id, static_cast<EHandType>(hand_type));
+      .def(py::init([](unsigned char device_id, unsigned char canfd_id, int hand_type) {
+             return new AgibotHandO12(device_id, canfd_id, static_cast<EHandType>(hand_type));
            }),
-           py::arg("device_id") = DEFAULT_DEVICE_ID, py::arg("hand_type") = 0)
+           py::arg("device_id") = DEFAULT_DEVICE_ID, py::arg("canfd_id") = 0, py::arg("hand_type") = 0)
       .def("set_device_id", &AgibotHandO12::SetDeviceId)
       .def("set_joint_position", &AgibotHandO12::SetJointMotorPosi)
       .def("get_joint_position", &AgibotHandO12::GetJointMotorPosi)

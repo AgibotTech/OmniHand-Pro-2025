@@ -32,7 +32,7 @@ class MotorPosSubscriber(Node):
             10
         )
         self.subscription  # prevent unused variable warning
-        
+
         self.get_logger().info('Motor Position Subscriber Node started')
 
     def motor_pos_callback(self, msg):

@@ -2,7 +2,7 @@
  * @Author: huangshiheng@agibot.com
  * @Date: 2025-11-06 17:29:45
  * @LastEditors: error: git config user.name & please set dead value or install git
- * @LastEditTime: 2025-11-07 13:40:24
+ * @LastEditTime: 2025-11-07 16:14:49
  * @FilePath: /OmniHand-Pro-2025/node/src/hand_node.h
  * @Description: 
  * 
@@ -32,7 +32,7 @@ namespace omnihand_pro {
 
 class OmniHandProNode : public rclcpp::Node {
  public:
-  OmniHandProNode(uint8_t device_id);
+  OmniHandProNode(uint8_t device_id, uint8_t canfd_id, EHandType hand_type);
   ~OmniHandProNode();
 
  private:

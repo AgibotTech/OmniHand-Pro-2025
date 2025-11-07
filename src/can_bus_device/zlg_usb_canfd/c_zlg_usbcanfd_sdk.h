@@ -18,7 +18,7 @@
  */
 class ZlgUsbcanfdSDK : public CanBusDeviceBase {
  public:
-  ZlgUsbcanfdSDK(uint8_t device_id);
+  ZlgUsbcanfdSDK(uint8_t canfd_id);
 
   ~ZlgUsbcanfdSDK() override;
 
@@ -33,7 +33,7 @@ class ZlgUsbcanfdSDK : public CanBusDeviceBase {
   bool Init() override;
 
  private:
-  uint8_t device_id_;
+  uint8_t canfd_id_;
 };
 
 #endif  // C_ZLG_USBCANFD_SDK_H

@@ -33,7 +33,7 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @param device_id 设备Id
    * @param hand_type 手型(左手/右手)
    */
-  explicit AgibotHandO12(unsigned char device_id, EHandType hand_type);
+  explicit AgibotHandO12(unsigned char device_id, unsigned char canfd_id, EHandType hand_type);
 
   ~AgibotHandO12();
 

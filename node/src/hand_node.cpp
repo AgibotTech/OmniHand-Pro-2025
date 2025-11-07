@@ -10,19 +10,15 @@
 
 namespace omnihand_pro {
 
-OmniHandProNode::OmniHandProNode(uint8_t device_id) : Node("omnihand_pro_node" + std::to_string(device_id)) {
-  if (device_id == 0) {
-    agibot_hand_ = std::make_shared<AgibotHandO12>(device_id, EHandType::eLeft);
-  } else {
-    agibot_hand_ = std::make_shared<AgibotHandO12>(device_id, EHandType::eRight);
-  }
+OmniHandProNode::OmniHandProNode(uint8_t device_id, uint8_t canfd_id, EHandType hand_type) : Node("omnihand_pro_node" + std::to_string(device_id)) {
+  agibot_hand_ = std::make_shared<AgibotHandO12>(device_id, canfd_id, hand_type);
 
   if (!agibot_hand_->Init()) {
     RCLCPP_ERROR(this->get_logger(), "Failed to initialize AgibotHandO12 device with ID %d", device_id);
     return;
   }
 
-  bool is_left = (device_id == 0);
+  bool is_left = (hand_type == EHandType::eLeft);
   std::string topic_prefix = "";
   if (is_left) {
     topic_prefix = "/agihand/omnihand/left/";
@@ -158,7 +154,7 @@ void OmniHandProNode::timer_1hz_callback() {
 void OmniHandProNode::timer_100hz_callback() {
   publish_motor_pos();
   publish_motor_vel();
-  // publish_tactile_sensor();
+  publish_tactile_sensor();
 }
 
 // Publisher implementations
@@ -236,7 +232,7 @@ void OmniHandProNode::publish_tactile_sensor() {
   msg.header.stamp = this->now();
   msg.header.frame_id = "tactile_frame";
   
-  for (int i = 0; i <= 5; i++) {
+  for (int i = 1; i <= 5; i++) {
     auto tactile_sensors = agibot_hand_->GetTactileSensorData(static_cast<EFinger>(i));
 
     auto data = omnihand_pro_node_msgs::msg::TactileSensorData();
