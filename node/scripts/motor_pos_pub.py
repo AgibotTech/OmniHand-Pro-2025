@@ -9,6 +9,7 @@ import rclpy
 from rclpy.node import Node
 import sys
 import os
+import time
 
 # 动态获取项目根路径
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,7 +18,7 @@ python_packages_path = os.path.join(project_root, "build/install/local/lib/pytho
 
 sys.path.append(python_packages_path)
 
-from omnihand_pro_node_msgs.msg import MotorPos
+from omnihand_node_msgs.msg import MotorPos
 
 
 class LeftMotorPosPublisher(Node):
@@ -27,12 +28,12 @@ class LeftMotorPosPublisher(Node):
         # 创建左手电机位置命令发布器
         self.left_motor_pos_cmd_publisher = self.create_publisher(
             MotorPos,
-            '/agihand/omnihand/left/motor_pos_cmd',
+            '/agihand/omnihand_pro/left/motor_pos_cmd',
             10
         )
         
         # 创建定时器，每100ms发布一次命令
-        self.timer = self.create_timer(0.1, self.publish_left_motor_pos_cmd)
+        self.timer = self.create_timer(4, self.publish_left_motor_pos_cmd)
         
         # 位置命令数据
         self.position_counter = 0
@@ -50,24 +51,21 @@ class LeftMotorPosPublisher(Node):
         import math
         self.position_counter += 1
 
-        # 12个电机的位置命令，范围0-2000
-        msg.pos = [
-            int(500 + 400 * math.sin(self.position_counter * 0.1)),
-            int(800 + 300 * math.cos(self.position_counter * 0.1)),
-            int(1000 + 400 * math.sin(self.position_counter * 0.15)),
-            int(1200 + 300 * math.cos(self.position_counter * 0.12)),
-            int(1500 + 200 * math.sin(self.position_counter * 0.08)),
-            int(700 + 350 * math.cos(self.position_counter * 0.09)),
-            int(900 + 250 * math.sin(self.position_counter * 0.13)),
-            int(1100 + 250 * math.cos(self.position_counter * 0.11)),
-            int(1300 + 300 * math.sin(self.position_counter * 0.14)),
-            int(600 + 400 * math.cos(self.position_counter * 0.16)),
-            int(1400 + 300 * math.sin(self.position_counter * 0.07)),
-            int(1600 + 300 * math.cos(self.position_counter * 0.18))
-        ]
-
+        msg.pos = [0, 2081, 4094, 2029, 4094, 4094, 2048, 4094, 4000, 4094]
         self.left_motor_pos_cmd_publisher.publish(msg)
-        
+        time.sleep(0.5)
+
+        msg.pos = [1500, 2081, 4094, 2029, 4094, 4094, 2048, 4094, 4000, 4094]
+        self.left_motor_pos_cmd_publisher.publish(msg)
+        time.sleep(0.5)
+
+        msg.pos = [500, 2081, 4094, 2029, 4094, 4094, 2048, 4094, 4000, 4094]
+        self.left_motor_pos_cmd_publisher.publish(msg)
+        time.sleep(0.5)
+
+        msg.pos = [1000, 2081, 4094, 2029, 4094, 4094, 2048, 4094, 4000, 4094]
+        self.left_motor_pos_cmd_publisher.publish(msg)
+
         self.get_logger().debug(
             f'Published left motor position command: {msg.pos}'
         )
@@ -81,7 +79,6 @@ class LeftMotorPosPublisher(Node):
         
         self.left_motor_pos_cmd_publisher.publish(msg)
         self.get_logger().info(f'Published custom positions: {positions}')
-
 
 def main(args=None):
     rclpy.init(args=args)

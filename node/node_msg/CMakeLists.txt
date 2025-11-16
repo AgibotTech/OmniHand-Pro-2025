@@ -11,6 +11,7 @@ set(msg_files
   "msg/CurrentReport.msg"
   "msg/CurrentThreshold.msg"
   "msg/ErrorPeriod.msg"
+  "msg/MotorAngle.msg"
   "msg/MotorErrorReport.msg"
   "msg/MotorPos.msg"
   "msg/MotorVel.msg"

@@ -21,44 +21,37 @@ OmniHandProNode::OmniHandProNode(uint8_t device_id, uint8_t canfd_id, EHandType 
   bool is_left = (hand_type == EHandType::eLeft);
   std::string topic_prefix = "";
   if (is_left) {
-    topic_prefix = "/agihand/omnihand/left/";
+    topic_prefix = "/agihand/omnihand_pro/left/";
   } else {
-    topic_prefix = "/agihand/omnihand/right/";
+    topic_prefix = "/agihand/omnihand_pro/right/";
   }
 
   // Initialize Publishers
   control_mode_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::ControlMode>(topic_prefix + "control_mode", 10);
   current_report_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::CurrentReport>(topic_prefix + "current_report", 10);
   current_threshold_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::CurrentThreshold>(topic_prefix + "current_threshold", 10);
-  error_period_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::ErrorPeriod>(topic_prefix + "error_period", 10);
   motor_error_report_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::MotorErrorReport>(topic_prefix + "motor_error_report", 10);
   motor_pos_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::MotorPos>(topic_prefix + "motor_pos", 10);
   motor_vel_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::MotorVel>(topic_prefix + "motor_vel", 10);
   tactile_sensor_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::TactileSensor>(topic_prefix + "tactile_sensor", 10);
-  temperature_period_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::TemperaturePeriod>(topic_prefix + "temperature_period", 10);
   temperature_report_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::TemperatureReport>(topic_prefix + "temperature_report", 10);
+  motor_angle_publisher_ = this->create_publisher<omnihand_pro_node_msgs::msg::MotorAngle>(topic_prefix + "motor_angle", 10);
 
   // Initialize Subscribers
   control_mode_subscriber_ = this->create_subscription<omnihand_pro_node_msgs::msg::ControlMode>(
     topic_prefix + "control_mode_cmd", 1, std::bind(&OmniHandProNode::control_mode_callback, this, std::placeholders::_1));
-  current_period_subscriber_ = this->create_subscription<omnihand_pro_node_msgs::msg::CurrentPeriod>(
-    topic_prefix + "current_period_cmd", 1, std::bind(&OmniHandProNode::current_period_callback, this, std::placeholders::_1));
   current_threshold_subscriber_ = this->create_subscription<omnihand_pro_node_msgs::msg::CurrentThreshold>(
     topic_prefix + "current_threshold_cmd", 1, std::bind(&OmniHandProNode::current_threshold_callback, this, std::placeholders::_1));
-  error_period_subscriber_ = this->create_subscription<omnihand_pro_node_msgs::msg::ErrorPeriod>(
-    topic_prefix + "error_period_cmd", 1, std::bind(&OmniHandProNode::error_period_callback, this, std::placeholders::_1));
-
   motor_pos_subscriber_ = this->create_subscription<omnihand_pro_node_msgs::msg::MotorPos>(
     topic_prefix + "motor_pos_cmd", 100, std::bind(&OmniHandProNode::motor_pos_callback, this, std::placeholders::_1));
   motor_vel_subscriber_ = this->create_subscription<omnihand_pro_node_msgs::msg::MotorVel>(
     topic_prefix + "motor_vel_cmd", 100, std::bind(&OmniHandProNode::motor_vel_callback, this, std::placeholders::_1));
-
-  temperature_period_subscriber_ = this->create_subscription<omnihand_pro_node_msgs::msg::TemperaturePeriod>(
-    topic_prefix + "temperature_period_cmd", 1, std::bind(&OmniHandProNode::temperature_period_callback, this, std::placeholders::_1));
+  motor_angle_subscriber_ = this->create_subscription<omnihand_pro_node_msgs::msg::MotorAngle>(
+    topic_prefix + "motor_angle_cmd", 100, std::bind(&OmniHandProNode::motor_angle_callback, this, std::placeholders::_1));
 
   timer_1hz_ = this->create_wall_timer(std::chrono::milliseconds(1000), std::bind(&OmniHandProNode::timer_1hz_callback, this));
 
-  timer_100hz_ = this->create_wall_timer(std::chrono::milliseconds(10), std::bind(&OmniHandProNode::timer_100hz_callback, this));
+  timer_10hz_ = this->create_wall_timer(std::chrono::milliseconds(10), std::bind(&OmniHandProNode::timer_10hz_callback, this));
 
   RCLCPP_INFO(this->get_logger(), "OmniHand Pro Node initialized device with ID %d", device_id);
 }
@@ -75,19 +68,8 @@ void OmniHandProNode::control_mode_callback(const omnihand_pro_node_msgs::msg::C
   for (auto mode : msg->modes) {
     vec_ctrl_mode.push_back(static_cast<unsigned char>(mode));
   }
-
+  std::lock_guard<std::mutex> lock(mutex_);
   agibot_hand_->SetAllControlMode(vec_ctrl_mode);
-}
-
-void OmniHandProNode::current_period_callback(const omnihand_pro_node_msgs::msg::CurrentPeriod::SharedPtr msg) {
-  RCLCPP_INFO(this->get_logger(), "Received current period command");
-
-  std::vector<uint16_t> vec_period;
-  for (auto period : msg->current_periods) {
-    vec_period.push_back(static_cast<uint16_t>(period));
-  }
-
-  agibot_hand_->SetAllCurrentReportPeriod(vec_period);
 }
 
 void OmniHandProNode::current_threshold_callback(const omnihand_pro_node_msgs::msg::CurrentThreshold::SharedPtr msg) {
@@ -97,17 +79,8 @@ void OmniHandProNode::current_threshold_callback(const omnihand_pro_node_msgs::m
   for (auto threshold : msg->current_thresholds) {
     vec_current_threshold.push_back(static_cast<int16_t>(threshold));
   }
+  std::lock_guard<std::mutex> lock(mutex_);
   agibot_hand_->SetAllCurrentThreshold(vec_current_threshold);
-}
-
-void OmniHandProNode::error_period_callback(const omnihand_pro_node_msgs::msg::ErrorPeriod::SharedPtr msg) {
-  RCLCPP_INFO(this->get_logger(), "Received error period command");
-
-  std::vector<uint16_t> vec_period;
-  for (auto period : msg->error_periods) {
-    vec_period.push_back(static_cast<uint16_t>(period));
-  }
-  agibot_hand_->SetAllErrorReportPeriod(vec_period);
 }
 
 void OmniHandProNode::motor_pos_callback(const omnihand_pro_node_msgs::msg::MotorPos::SharedPtr msg) {
@@ -117,6 +90,7 @@ void OmniHandProNode::motor_pos_callback(const omnihand_pro_node_msgs::msg::Moto
   for (auto pos : msg->pos) {
     vec_pos.push_back(static_cast<int16_t>(pos));
   }
+  std::lock_guard<std::mutex> lock(mutex_);
   agibot_hand_->SetAllJointMotorPosi(vec_pos);
 }
 
@@ -127,23 +101,24 @@ void OmniHandProNode::motor_vel_callback(const omnihand_pro_node_msgs::msg::Moto
   for (auto vel : msg->vels) {
     vec_velo.push_back(static_cast<int16_t>(vel));
   }
+  std::lock_guard<std::mutex> lock(mutex_);
   agibot_hand_->SetAllJointMotorVelo(vec_velo);
 }
 
+void OmniHandProNode::motor_angle_callback(const omnihand_pro_node_msgs::msg::MotorAngle::SharedPtr msg) {
+  RCLCPP_INFO(this->get_logger(), "Received motor angle command");
 
-void OmniHandProNode::temperature_period_callback(const omnihand_pro_node_msgs::msg::TemperaturePeriod::SharedPtr msg) {
-  RCLCPP_INFO(this->get_logger(), "Received temperature period command");
-
-  std::vector<uint16_t> vec_period;
-  for (auto period : msg->temperature_periods) {
-    vec_period.push_back(static_cast<uint16_t>(period));
+  std::vector<double> vec_angle;
+  for (auto angle : msg->angles) {
+    vec_angle.push_back(static_cast<double>(angle));
   }
-  agibot_hand_->SetAllTemperReportPeriod(vec_period);
+  std::lock_guard<std::mutex> lock(mutex_);
+  agibot_hand_->SetAllActiveJointAngles(vec_angle);
 }
-
 
 // Timer callback implementations
 void OmniHandProNode::timer_1hz_callback() {
+  std::lock_guard<std::mutex> lock(mutex_);
   publish_control_mode();
   publish_current_report();
   publish_current_threshold();
@@ -151,10 +126,12 @@ void OmniHandProNode::timer_1hz_callback() {
   publish_temperature_report();
 }
 
-void OmniHandProNode::timer_100hz_callback() {
+void OmniHandProNode::timer_10hz_callback() {
+  std::lock_guard<std::mutex> lock(mutex_);
   publish_motor_pos();
   publish_motor_vel();
   publish_tactile_sensor();
+  publish_motor_angle();
 }
 
 // Publisher implementations
@@ -258,6 +235,16 @@ void OmniHandProNode::publish_temperature_report() {
   auto temperatures = agibot_hand_->GetAllTemperatureReport();
   msg.temperature_reports = temperatures;
   temperature_report_publisher_->publish(msg);
+}
+
+
+void OmniHandProNode::publish_motor_angle() {
+  auto msg = omnihand_pro_node_msgs::msg::MotorAngle();
+  msg.header.stamp = this->now();
+  msg.header.frame_id = "motor_frame";
+  auto angles = agibot_hand_->GetAllActiveJointAngles();
+  msg.angles = angles;
+  motor_angle_publisher_->publish(msg);
 }
 
 } // namespace omnihand_pro

@@ -17,7 +17,7 @@ python_packages_path = os.path.join(project_root, "build/install/local/lib/pytho
 
 sys.path.append(python_packages_path)
 
-from omnihand_pro_node_msgs.msg import MotorPos
+from omnihand_node_msgs.msg import MotorPos
 
 
 class MotorPosSubscriber(Node):
@@ -27,7 +27,7 @@ class MotorPosSubscriber(Node):
         # 创建订阅器
         self.subscription = self.create_subscription(
             MotorPos,
-            '/agihand/omnihand/left/motor_pos',
+            '/agihand/omnihand_pro/left/motor_pos',
             self.motor_pos_callback,
             10
         )
