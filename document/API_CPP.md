@@ -136,7 +136,7 @@ struct CommuParams {
  */
 explicit AgibotHandO12(unsigned char device_id, unsigned char canfd_id, unsigned char canfd_id);
 ```
-s
+
 ### 设备信息相关
 
 ```cpp
@@ -188,6 +188,80 @@ void SetAllJointMotorPosi(std::vector<short> vec_posi);
  * @return 所有关节的当前位置向量，长度为12
  */
 std::vector<short> GetAllJointMotorPosi();
+```
+
+### 关节角位置控制
+
+#### 关节角输出/输入顺序（右手）
+
+| 索引 | 关节名称           | 最小角度 (rad) | 最大角度 (rad) | 最小角度 (°) | 最大角度 (°) | 速度限制 (rad/s) |
+| ---- | ------------------ | -------------- | -------------- | ------------ | ------------ | ---------------- |
+| 1    | R_thumb_roll_joint | -0.1745        | 0.8727         | -10          | 50           | 0.164            |
+| 2    | R_thumb_abad_joint | -1.7453        | 0              | -100         | 0            | 0.164            |
+| 3    | R_thumb_mcp_joint  | 0              | 0.8552         | 0            | 49           | 0.308            |
+| 4    | R_index_abad_joint | -0.2094        | 0              | -12          | 0            | 0.164            |
+| 5    | R_index_pip_joint  | 0              | 1.5708         | 0            | 90           | 0.308            |
+| 6    | R_middle_pip_joint | 0              | 1.5708         | 0            | 90           | 0.308            |
+| 7    | R_ring_abad_joint  | 0              | 0.1745         | 0            | 10           | 0.164            |
+| 8    | R_ring_pip_joint   | 0              | 1.5708         | 0            | 90           | 0.308            |
+| 9    | R_pinky_abad_joint | 0              | 0.1745         | 0            | 10           | 0.164            |
+| 10   | R_pinky_pip_joint  | 0              | 1.5708         | 0            | 90           | 0.308            |
+
+#### 关节角输出/输入顺序（左手）
+
+| 索引 | 关节名称           | 最小角度 (rad) | 最大角度 (rad) | 最小角度 (°) | 最大角度 (°) | 速度限制 (rad/s) |
+| ---- | ------------------ | -------------- | -------------- | ------------ | ------------ | ---------------- |
+| 1    | L_thumb_roll_joint | -0.8727        | 0.1745         | -50          | 10           | 0.164            |
+| 2    | L_thumb_abad_joint | 0              | 1.7453         | 0            | 100          | 0.164            |
+| 3    | L_thumb_mcp_joint  | -0.8552        | 0              | -49          | 0            | 0.308            |
+| 4    | L_index_abad_joint | 0              | 0.2094         | 0            | 12           | 0.164            |
+| 5    | L_index_pip_joint  | 0              | 1.5708         | 0            | 90           | 0.308            |
+| 6    | L_middle_pip_joint | 0              | 1.5708         | 0            | 90           | 0.308            |
+| 7    | L_ring_abad_joint  | -0.1745        | 0              | -10          | 0            | 0.164            |
+| 8    | L_ring_pip_joint   | 0              | 1.5708         | 0            | 90           | 0.308            |
+| 9    | L_pinky_abad_joint | -0.2094        | 0              | -12          | 0            | 0.164            |
+| 10   | L_pinky_pip_joint  | 0              | 1.5708         | 0            | 90           | 0.308            |
+
+```cpp
+/**
+    * @brief 设置所有主动关节角度
+    * @param angles 关节角度向量（单位：弧度），长度必须为10
+    * @note 具体输出顺序和限位请参考 assets 模型文件
+    */
+void SetAllActiveJointAngles(const std::vector<double>& angles);
+
+/**
+    * @brief 获取所有主动关节角度
+    * @return 关节角度向量（单位：弧度），长度为10
+    * @note 具体输出顺序和限位请参考 assets 模型文件
+    */
+std::vector<double> GetAllActiveJointAngles() const;
+
+/**
+    * @brief 获取所有关节角度（包括主动和被动）
+    * @return 关节角度向量（单位：弧度）
+    * @note 具体输出顺序和限位请参考 assets 模型文件
+    */
+std::vector<double> GetAllJointAngles() const;/**
+    * @brief 设置所有主动关节角度
+    * @param angles 关节角度向量（单位：弧度），长度必须为10
+    * @note 具体输出顺序和限位请参考 assets 模型文件
+    */
+void SetAllActiveJointAngles(const std::vector<double>& angles);
+
+/**
+    * @brief 获取所有主动关节角度
+    * @return 关节角度向量（单位：弧度），长度为10
+    * @note 具体输出顺序和限位请参考 assets 模型文件
+    */
+std::vector<double> GetAllActiveJointAngles() const;
+
+/**
+    * @brief 获取所有关节角度（包括主动和被动）
+    * @return 关节角度向量（单位：弧度）
+    * @note 具体输出顺序和限位请参考 assets 模型文件
+    */
+std::vector<double> GetAllJointAngles() const;
 ```
 
 ### 速度控制
