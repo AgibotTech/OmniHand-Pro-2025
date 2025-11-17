@@ -28,17 +28,19 @@
 
 #define DEGREE_OF_FREEDOM 12
 
-AgibotHandO12::AgibotHandO12(unsigned char device_id, EHandType hand_type)
+AgibotHandO12::AgibotHandO12(unsigned char device_id, unsigned char canfd_id, EHandType hand_type)
     : device_id_(device_id) {
   is_left_hand_ = hand_type == EHandType::eLeft;
 
 #ifdef ZLG_USBCANFD_SDK
-  canfd_device_ = std::make_unique<ZlgUsbcanfdSDK>();
+  canfd_device_ = std::make_unique<ZlgUsbcanfdSDK>(canfd_id);
 #endif
 
 #ifdef SOCKET_CAN
   canfd_device_ = std::make_unique<CanBusDeviceSocketCan>();
 #endif
+
+  init_success_ = canfd_device_->Init();
   canfd_device_->SetCallback(std::bind(&AgibotHandO12::ProcessMsg, this, std::placeholders::_1));
   canfd_device_->SetCalcuMatchRepId(std::bind(&AgibotHandO12::GetMatchedRepId, this, std::placeholders::_1));
   canfd_device_->SetMsgMatchJudge(std::bind(&AgibotHandO12::JudgeMsgMatch, this, std::placeholders::_1, std::placeholders::_2));

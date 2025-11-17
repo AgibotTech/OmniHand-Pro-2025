@@ -33,9 +33,13 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @param device_id 设备Id
    * @param hand_type 手型(左手/右手)
    */
-  explicit AgibotHandO12(unsigned char device_id, EHandType hand_type);
+  explicit AgibotHandO12(unsigned char device_id, unsigned char canfd_id, EHandType hand_type);
 
   ~AgibotHandO12();
+
+  bool Init() const {
+    return init_success_;
+  }
 
   /**
    * @brief 获取厂家信息
@@ -395,6 +399,8 @@ class AGIBOT_EXPORT AgibotHandO12 {
    * @brief O12运动学求解器
    */
   std::unique_ptr<omnihandProSDK::O12KinematicsSolver> kinematics_solver_ptr_;
+
+  bool init_success_{false};
 };
 
 #endif  // C_AGIBOT_HAND_H
