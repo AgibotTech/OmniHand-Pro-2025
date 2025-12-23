@@ -119,6 +119,12 @@ class AGIBOT_EXPORT AgibotHandO12 {
    */
   std::vector<double> GetAllJointAngles();
 
+  /**
+   * @brief 通过主动关节角，获取所有主动+被动关节的关节角
+   * @return
+   */
+  std::vector<double> GetAllJointPos(const std::vector<double> &active_joint_pos);
+
 #if !DISABLE_FUNC
   /**
    * @brief 设置单个关节电机力矩
